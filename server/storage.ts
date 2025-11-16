@@ -128,7 +128,7 @@ export class MemStorage implements IStorage {
         bio2: "",
         bio3: "",
         skills: [],
-        contactEmail: "hello@codewithkayla.com",
+        contactEmail: "hello@codewithrodrick.com",
         updatedAt: new Date(),
       };
     }

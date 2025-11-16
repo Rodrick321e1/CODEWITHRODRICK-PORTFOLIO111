@@ -168,7 +168,7 @@ export default function ContactSection() {
                   <div>
                     <p className="font-semibold text-foreground">Email</p>
                     <p className="text-muted-foreground" data-testid="text-email-address">
-                      hello@codewithkayla.com
+                      hello@codewithrodrick.com
                     </p>
                   </div>
                 </motion.div>

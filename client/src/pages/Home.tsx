@@ -17,10 +17,10 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="text-center">
             <p className="font-display text-xl font-bold text-primary mb-2">
-              CODEWITHKAYLA
+              CODEWITHRODRICK
             </p>
             <p className="text-sm text-muted-foreground" data-testid="text-footer-copyright">
-              © {new Date().getFullYear()} CODEWITHKAYLA. All rights reserved.
+              © {new Date().getFullYear()} CODEWITHRODRICK. All rights reserved.
             </p>
           </div>
         </div>

@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Code2, Palette, Rocket } from "lucide-react";
 import type { Profile } from "@shared/schema";
-import profilePlaceholder from "@assets/generated_images/Professional_developer_headshot_portrait_8a2be057.png";
 
 const highlights = [
   {
@@ -29,8 +28,8 @@ export default function AboutSection() {
     queryKey: ["/api/profile"],
   });
 
-  const profileImage = profile?.profileImageUrl || profilePlaceholder;
-  const bio1 = profile?.bio1 || "Hi, I'm Kayla! I'm a passionate web developer and designer with a love for creating beautiful, functional websites that make a real impact. With over 5 years of experience, I've had the privilege of working with clients from startups to established businesses.";
+  const profileImage = profile?.profileImageUrl;
+  const bio1 = profile?.bio1 || "Hi, I'm Rodrick! I'm a passionate web developer and designer with a love for creating beautiful, functional websites that make a real impact. With over 5 years of experience, I've had the privilege of working with clients from startups to established businesses.";
   const bio2 = profile?.bio2 || "My approach combines clean code with stunning design. I believe every website should not only look great but also provide an exceptional user experience. From concept to launch, I'm dedicated to bringing your vision to life.";
   const bio3 = profile?.bio3 || "When I'm not coding, you'll find me exploring new design trends, contributing to open-source projects, or enjoying a good cup of coffee while sketching out my next creative idea.";
   const skills = profile?.skills || ["React", "TypeScript", "Node.js", "Tailwind CSS", "UI/UX Design", "Responsive Design", "API Development", "Database Design"];
@@ -91,8 +90,8 @@ export default function AboutSection() {
                   }}
                 />
                 <Avatar className="relative h-64 w-64 lg:h-80 lg:w-80 border-4 border-primary/20" data-testid="img-profile">
-                  <AvatarImage src={profileImage} alt="Kayla - Web Developer" />
-                  <AvatarFallback className="text-4xl font-display font-bold bg-gradient-to-br from-primary to-blue-600 text-white">K</AvatarFallback>
+                  <AvatarImage src={profileImage} alt="Rodrick - Web Developer" />
+                  <AvatarFallback className="text-4xl font-display font-bold bg-gradient-to-br from-primary to-blue-600 text-white">R</AvatarFallback>
                 </Avatar>
               </div>
             </motion.div>
@@ -108,7 +107,7 @@ export default function AboutSection() {
                 className="mb-6 font-display text-4xl font-bold tracking-tight text-foreground lg:text-5xl"
                 data-testid="text-about-heading"
               >
-                Hi, I'm Kayla! 👋
+                Hi, I'm Rodrick! 👋
               </h2>
 
               <div className="space-y-4 text-lg text-muted-foreground">
