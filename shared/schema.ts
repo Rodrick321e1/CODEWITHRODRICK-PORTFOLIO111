@@ -28,7 +28,7 @@ export const profile = pgTable("profile", {
   bio2: text("bio_2").notNull().default(""),
   bio3: text("bio_3").notNull().default(""),
   skills: text("skills").array().notNull().default(sql`ARRAY[]::text[]`),
-  contactEmail: text("contact_email").notNull().default("hello@codewithkayla.com"),
+  contactEmail: text("contact_email").notNull().default("hello@codewithrodrick.com"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 

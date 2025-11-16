@@ -37,11 +37,11 @@ export class MemStorage implements IStorage {
     this.profile = {
       id: randomUUID(),
       profileImageUrl: null,
-      bio1: "Hi, I'm Kayla! I'm a passionate web developer and designer with a love for creating beautiful, functional websites that make a real impact. With over 5 years of experience, I've had the privilege of working with clients from startups to established businesses.",
+      bio1: "Hi, I'm Rodrick! I'm a passionate web developer and designer with a love for creating beautiful, functional websites that make a real impact. With over 5 years of experience, I've had the privilege of working with clients from startups to established businesses.",
       bio2: "My approach combines clean code with stunning design. I believe every website should not only look great but also provide an exceptional user experience. From concept to launch, I'm dedicated to bringing your vision to life.",
       bio3: "When I'm not coding, you'll find me exploring new design trends, contributing to open-source projects, or enjoying a good cup of coffee while sketching out my next creative idea.",
       skills: ["React", "TypeScript", "Node.js", "Tailwind CSS", "UI/UX Design", "Responsive Design", "API Development", "Database Design"],
-      contactEmail: "hello@codewithkayla.com",
+      contactEmail: "hello@codewithrodrick.com",
       updatedAt: new Date(),
     };
   }

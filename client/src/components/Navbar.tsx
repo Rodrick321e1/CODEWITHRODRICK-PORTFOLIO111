@@ -66,7 +66,7 @@ export default function Navbar() {
               whileTap={{ scale: 0.95 }}
               data-testid="button-logo"
             >
-              CODEWITHKAYLA
+              CODEWITHRODRICK
             </motion.button>
 
             <div className="hidden items-center gap-1 md:flex">

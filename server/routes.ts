@@ -236,7 +236,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const profile = await storage.getProfile();
-      const toEmail = profile?.contactEmail || "hello@codewithkayla.com";
+      const toEmail = profile?.contactEmail || "hello@codewithrodrick.com";
 
       await sendEmail(
         toEmail,

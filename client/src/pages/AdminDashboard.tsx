@@ -62,7 +62,7 @@ export default function AdminDashboard() {
         <div className="mx-auto max-w-7xl px-6 py-4">
           <div className="flex items-center justify-between">
             <h1 className="font-display text-2xl font-bold text-primary">
-              CODEWITHKAYLA Admin
+              CODEWITHRODRICK Admin
             </h1>
             <Button
               variant="outline"
