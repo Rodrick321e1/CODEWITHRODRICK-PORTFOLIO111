@@ -1,7 +1,7 @@
 # Design Guidelines for CODEWITHKAYLA Portfolio
 
 ## Design Approach
-**Reference-Based Strategy**: Drawing inspiration from premium portfolio platforms (Awwwards, Dribbble showcase pages) and creative agency sites (Active Theory, Locomotive). Focus on bold typography, generous whitespace, and elegant project presentation that positions CODEWITHKAYLA as a modern, professional web developer.
+**Reference-Based Strategy**: Modern, dynamic design with blue and white color scheme. Focus on bold typography, smooth animations, and vibrant blue accents that create energy and professionalism. Include persistent navigation bar for easy browsing.
 
 ## Typography System
 
