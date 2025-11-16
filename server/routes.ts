@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import nodemailer from "nodemailer";
+import { sendEmail } from "./gmail";
 import { insertProjectSchema, insertProfileSchema, insertAdminUserSchema } from "@shared/schema";
 
 const uploadsDir = path.join(process.cwd(), "uploads");
@@ -238,27 +238,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const profile = await storage.getProfile();
       const toEmail = profile?.contactEmail || "hello@codewithkayla.com";
 
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_APP_PASSWORD,
-        },
-      });
-
-      await transporter.sendMail({
-        from: process.env.GMAIL_USER,
-        to: toEmail,
-        replyTo: email,
-        subject: `Portfolio Contact: ${name}`,
-        html: `
+      await sendEmail(
+        toEmail,
+        `Portfolio Contact: ${name}`,
+        `
           <h3>New Contact Form Submission</h3>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Message:</strong></p>
           <p>${message.replace(/\n/g, "<br>")}</p>
         `,
-      });
+        email
+      );
 
       res.json({ success: true });
     } catch (error: any) {
