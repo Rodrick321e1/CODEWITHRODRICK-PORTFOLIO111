@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Mail, Clock, CheckCircle2, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -21,17 +22,24 @@ export default function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // todo: Connect to backend API
-    console.log("Form submitted:", formData);
+    try {
+      await apiRequest("POST", "/api/contact", formData);
 
-    setTimeout(() => {
       toast({
         title: "Message sent!",
         description: "Thank you for reaching out. I'll get back to you soon.",
       });
       setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      const error = err as Error;
+      toast({
+        title: "Failed to send message",
+        description: error.message || "Please try again later",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (

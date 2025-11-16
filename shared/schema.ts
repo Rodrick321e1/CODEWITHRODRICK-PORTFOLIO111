@@ -1,18 +1,57 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
+export const adminUsers = pgTable("admin_users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
+export const projects = pgTable("projects", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  imageUrl: text("image_url").notNull(),
+  deviceType: text("device_type").notNull().default("monitor"),
+  tags: text("tags").array().notNull().default(sql`ARRAY[]::text[]`),
+  orderIndex: varchar("order_index").notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export const profile = pgTable("profile", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  profileImageUrl: text("profile_image_url"),
+  bio1: text("bio_1").notNull().default(""),
+  bio2: text("bio_2").notNull().default(""),
+  bio3: text("bio_3").notNull().default(""),
+  skills: text("skills").array().notNull().default(sql`ARRAY[]::text[]`),
+  contactEmail: text("contact_email").notNull().default("hello@codewithkayla.com"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAdminUserSchema = createInsertSchema(adminUsers).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertProjectSchema = createInsertSchema(projects).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertProfileSchema = createInsertSchema(profile).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
+export type AdminUser = typeof adminUsers.$inferSelect;
+
+export type InsertProject = z.infer<typeof insertProjectSchema>;
+export type Project = typeof projects.$inferSelect;
+
+export type InsertProfile = z.infer<typeof insertProfileSchema>;
+export type Profile = typeof profile.$inferSelect;
