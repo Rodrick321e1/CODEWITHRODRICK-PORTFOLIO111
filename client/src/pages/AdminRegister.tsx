@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,32 @@ export default function AdminRegister() {
   const [, setLocation] = useLocation();
   const [credentials, setCredentials] = useState({ username: "", password: "", confirmPassword: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingAdmin, setIsCheckingAdmin] = useState(true);
   const { toast } = useToast();
+
+  useEffect(() => {
+    checkAdminExists();
+  }, []);
+
+  const checkAdminExists = async () => {
+    try {
+      const response = await fetch("/api/auth/admin-exists");
+      const data = await response.json();
+      
+      if (data.exists) {
+        toast({
+          title: "Registration closed",
+          description: "Admin account already exists. Please login instead.",
+          variant: "destructive",
+        });
+        setLocation("/admin/login");
+      } else {
+        setIsCheckingAdmin(false);
+      }
+    } catch (error) {
+      setIsCheckingAdmin(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +84,14 @@ export default function AdminRegister() {
       setIsLoading(false);
     }
   };
+
+  if (isCheckingAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-background p-6">

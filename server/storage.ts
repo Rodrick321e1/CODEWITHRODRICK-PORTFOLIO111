@@ -13,6 +13,9 @@ export interface IStorage {
   getAdminUser(id: string): Promise<AdminUser | undefined>;
   getAdminUserByUsername(username: string): Promise<AdminUser | undefined>;
   createAdminUser(user: InsertAdminUser): Promise<AdminUser>;
+  adminExists(): Promise<boolean>;
+  updateAdminPassword(id: string, password: string): Promise<AdminUser | undefined>;
+  updateAdminProfileImage(id: string, imageUrl: string | null): Promise<AdminUser | undefined>;
 
   // Projects
   getAllProjects(): Promise<Project[]>;
@@ -58,14 +61,47 @@ export class MemStorage implements IStorage {
   }
 
   async createAdminUser(insertUser: InsertAdminUser): Promise<AdminUser> {
+    if (this.adminUsers.size > 0) {
+      throw new Error("Admin account already exists. Only one admin is allowed.");
+    }
+
     const id = randomUUID();
     const user: AdminUser = {
       ...insertUser,
       id,
+      profileImageUrl: null,
       createdAt: new Date(),
     };
     this.adminUsers.set(id, user);
     return user;
+  }
+
+  async adminExists(): Promise<boolean> {
+    return this.adminUsers.size > 0;
+  }
+
+  async updateAdminPassword(id: string, password: string): Promise<AdminUser | undefined> {
+    const user = this.adminUsers.get(id);
+    if (!user) return undefined;
+
+    const updated: AdminUser = {
+      ...user,
+      password,
+    };
+    this.adminUsers.set(id, updated);
+    return updated;
+  }
+
+  async updateAdminProfileImage(id: string, imageUrl: string | null): Promise<AdminUser | undefined> {
+    const user = this.adminUsers.get(id);
+    if (!user) return undefined;
+
+    const updated: AdminUser = {
+      ...user,
+      profileImageUrl: imageUrl,
+    };
+    this.adminUsers.set(id, updated);
+    return updated;
   }
 
   // Projects

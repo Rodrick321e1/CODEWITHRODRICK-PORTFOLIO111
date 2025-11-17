@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,22 @@ export default function AdminLogin() {
   const [, setLocation] = useLocation();
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [adminExists, setAdminExists] = useState(true);
   const { toast } = useToast();
+
+  useEffect(() => {
+    checkAdminExists();
+  }, []);
+
+  const checkAdminExists = async () => {
+    try {
+      const response = await fetch("/api/auth/admin-exists");
+      const data = await response.json();
+      setAdminExists(data.exists);
+    } catch (error) {
+      setAdminExists(true);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,17 +106,19 @@ export default function AdminLogin() {
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
 
-          <p className="text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
-            <button
-              type="button"
-              onClick={() => setLocation("/admin/register")}
-              className="text-primary hover:underline"
-              data-testid="link-register"
-            >
-              Create one
-            </button>
-          </p>
+          {!adminExists && (
+            <p className="text-center text-sm text-muted-foreground">
+              Don't have an account?{" "}
+              <button
+                type="button"
+                onClick={() => setLocation("/admin/register")}
+                className="text-primary hover:underline"
+                data-testid="link-register"
+              >
+                Create one
+              </button>
+            </p>
+          )}
         </form>
       </Card>
     </div>

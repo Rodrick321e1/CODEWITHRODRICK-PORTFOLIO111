@@ -4,9 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { LogOut, FolderKanban, User } from "lucide-react";
+import { LogOut, FolderKanban, User, Settings } from "lucide-react";
 import ProjectManagement from "@/components/admin/ProjectManagement";
 import ProfileManagement from "@/components/admin/ProfileManagement";
+import AdminSettings from "@/components/admin/AdminSettings";
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
@@ -87,6 +88,10 @@ export default function AdminDashboard() {
               <User className="h-4 w-4 mr-2" />
               Profile
             </TabsTrigger>
+            <TabsTrigger value="settings" data-testid="tab-settings">
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="projects">
@@ -95,6 +100,10 @@ export default function AdminDashboard() {
 
           <TabsContent value="profile">
             <ProfileManagement />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <AdminSettings />
           </TabsContent>
         </Tabs>
       </div>

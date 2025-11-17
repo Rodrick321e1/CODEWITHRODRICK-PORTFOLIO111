@@ -78,6 +78,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth Routes
   app.post("/api/auth/register", async (req, res) => {
     try {
+      const adminExists = await storage.adminExists();
+      if (adminExists) {
+        return res.status(403).json({ error: "Admin account already exists. Registration is closed." });
+      }
+
       const existingUser = await storage.getAdminUserByUsername(req.body.username);
       if (existingUser) {
         return res.status(400).json({ error: "Username already exists" });
@@ -138,7 +143,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json({ id: user.id, username: user.username });
+    res.json({ id: user.id, username: user.username, profileImageUrl: user.profileImageUrl });
+  });
+
+  app.get("/api/auth/admin-exists", async (req, res) => {
+    try {
+      const exists = await storage.adminExists();
+      res.json({ exists });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/auth/change-password", requireAuth, async (req, res) => {
+    try {
+      const { currentPassword, newPassword } = req.body;
+
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ error: "Current and new passwords are required" });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters" });
+      }
+
+      const user = await storage.getAdminUser(req.session.userId!);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const isValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isValid) {
+        return res.status(401).json({ error: "Current password is incorrect" });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      const updated = await storage.updateAdminPassword(req.session.userId!, hashedPassword);
+
+      if (!updated) {
+        return res.status(500).json({ error: "Failed to update password" });
+      }
+
+      res.json({ success: true, message: "Password updated successfully" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/auth/update-profile-image", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+      
+      const updated = await storage.updateAdminProfileImage(req.session.userId!, imageUrl);
+
+      if (!updated) {
+        return res.status(500).json({ error: "Failed to update profile image" });
+      }
+
+      res.json({ success: true, profileImageUrl: imageUrl });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
   });
 
   // Image Upload Route
