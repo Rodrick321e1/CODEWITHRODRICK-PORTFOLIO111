@@ -33,6 +33,16 @@ export const profile = pgTable("profile", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const events = pgTable("events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  eventDate: timestamp("event_date").notNull(),
+  location: text("location").notNull(),
+  imageUrl: text("image_url").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const insertAdminUserSchema = createInsertSchema(adminUsers).omit({
   id: true,
   createdAt: true,
@@ -48,6 +58,11 @@ export const insertProfileSchema = createInsertSchema(profile).omit({
   updatedAt: true,
 });
 
+export const insertEventSchema = createInsertSchema(events).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
 export type AdminUser = typeof adminUsers.$inferSelect;
 
@@ -56,3 +71,6 @@ export type Project = typeof projects.$inferSelect;
 
 export type InsertProfile = z.infer<typeof insertProfileSchema>;
 export type Profile = typeof profile.$inferSelect;
+
+export type InsertEvent = z.infer<typeof insertEventSchema>;
+export type Event = typeof events.$inferSelect;
