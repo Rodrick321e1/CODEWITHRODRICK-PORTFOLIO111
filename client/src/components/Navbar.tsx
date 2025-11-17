@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,9 +12,12 @@ const navItems = [
 ];
 
 export default function Navbar() {
+  const [, setLocation] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const pressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const pressStartRef = useRef<number>(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,6 +49,35 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
   };
 
+  const handleLogoPointerDown = () => {
+    pressStartRef.current = Date.now();
+    pressTimerRef.current = setTimeout(() => {
+      setLocation("/admin/login");
+    }, 3000);
+  };
+
+  const handleLogoPointerUp = () => {
+    const pressDuration = Date.now() - pressStartRef.current;
+    if (pressTimerRef.current) {
+      clearTimeout(pressTimerRef.current);
+      pressTimerRef.current = null;
+    }
+    if (pressDuration < 3000) {
+      scrollToSection("#home");
+    }
+  };
+
+  const handleLogoPointerLeave = () => {
+    if (pressTimerRef.current) {
+      clearTimeout(pressTimerRef.current);
+      pressTimerRef.current = null;
+    }
+  };
+
+  const handleLogoClick = () => {
+    scrollToSection("#home");
+  };
+
   return (
     <>
       <motion.nav
@@ -61,7 +94,10 @@ export default function Navbar() {
           <div className="flex h-16 items-center justify-between">
             <motion.button
               className="font-display text-xl font-bold text-primary"
-              onClick={() => scrollToSection("#home")}
+              onClick={handleLogoClick}
+              onPointerDown={handleLogoPointerDown}
+              onPointerUp={handleLogoPointerUp}
+              onPointerLeave={handleLogoPointerLeave}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               data-testid="button-logo"
