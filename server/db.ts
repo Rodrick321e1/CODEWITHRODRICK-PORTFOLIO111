@@ -1,10 +1,8 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+import pg from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from "@shared/schema";
 
-neonConfig.webSocketConstructor = ws;
-neonConfig.pipelineConnect = false;
+const { Pool } = pg;
 
 if (!process.env.DATABASE_URL) {
   console.warn(
@@ -17,5 +15,5 @@ export const pool = process.env.DATABASE_URL
   : null as any;
   
 export const db = process.env.DATABASE_URL 
-  ? drizzle({ client: pool, schema })
+  ? drizzle(pool, { schema })
   : null as any;
