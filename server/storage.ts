@@ -5,8 +5,13 @@ import {
   type InsertProject,
   type Profile,
   type InsertProfile,
+  adminUsers,
+  projects,
+  profile as profileTable,
 } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { db } from "./db";
+import { eq, asc } from "drizzle-orm";
 
 export interface IStorage {
   // Admin Users
@@ -179,4 +184,118 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getAdminUser(id: string): Promise<AdminUser | undefined> {
+    const [user] = await db.select().from(adminUsers).where(eq(adminUsers.id, id));
+    return user || undefined;
+  }
+
+  async getAdminUserByUsername(username: string): Promise<AdminUser | undefined> {
+    const [user] = await db.select().from(adminUsers).where(eq(adminUsers.username, username));
+    return user || undefined;
+  }
+
+  async createAdminUser(insertUser: InsertAdminUser): Promise<AdminUser> {
+    const existingUsers = await db.select().from(adminUsers);
+    if (existingUsers.length > 0) {
+      throw new Error("Admin account already exists. Only one admin is allowed.");
+    }
+
+    const [user] = await db
+      .insert(adminUsers)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async adminExists(): Promise<boolean> {
+    const users = await db.select().from(adminUsers);
+    return users.length > 0;
+  }
+
+  async updateAdminPassword(id: string, password: string): Promise<AdminUser | undefined> {
+    const [updated] = await db
+      .update(adminUsers)
+      .set({ password })
+      .where(eq(adminUsers.id, id))
+      .returning();
+    return updated || undefined;
+  }
+
+  async updateAdminProfileImage(id: string, imageUrl: string | null): Promise<AdminUser | undefined> {
+    const [updated] = await db
+      .update(adminUsers)
+      .set({ profileImageUrl: imageUrl })
+      .where(eq(adminUsers.id, id))
+      .returning();
+    return updated || undefined;
+  }
+
+  async getAllProjects(): Promise<Project[]> {
+    return await db.select().from(projects).orderBy(asc(projects.orderIndex));
+  }
+
+  async getProject(id: string): Promise<Project | undefined> {
+    const [project] = await db.select().from(projects).where(eq(projects.id, id));
+    return project || undefined;
+  }
+
+  async createProject(insertProject: InsertProject): Promise<Project> {
+    const [project] = await db
+      .insert(projects)
+      .values(insertProject)
+      .returning();
+    return project;
+  }
+
+  async updateProject(id: string, updates: Partial<InsertProject>): Promise<Project | undefined> {
+    const [updated] = await db
+      .update(projects)
+      .set(updates)
+      .where(eq(projects.id, id))
+      .returning();
+    return updated || undefined;
+  }
+
+  async deleteProject(id: string): Promise<boolean> {
+    const result = await db.delete(projects).where(eq(projects.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getProfile(): Promise<Profile | undefined> {
+    const [profileData] = await db.select().from(profileTable);
+    return profileData || undefined;
+  }
+
+  async updateProfile(updates: Partial<InsertProfile>): Promise<Profile> {
+    const existing = await this.getProfile();
+    
+    if (!existing) {
+      const defaultProfile = {
+        profileImageUrl: null,
+        bio1: "Hi, I'm Rodrick! I'm a passionate web developer and designer with a love for creating beautiful, functional websites that make a real impact. With over 5 years of experience, I've had the privilege of working with clients from startups to established businesses.",
+        bio2: "My approach combines clean code with stunning design. I believe every website should not only look great but also provide an exceptional user experience. From concept to launch, I'm dedicated to bringing your vision to life.",
+        bio3: "When I'm not coding, you'll find me exploring new design trends, contributing to open-source projects, or enjoying a good cup of coffee while sketching out my next creative idea.",
+        skills: ["React", "TypeScript", "Node.js", "Tailwind CSS", "UI/UX Design", "Responsive Design", "API Development", "Database Design"],
+        contactEmail: "hello@codewithrodrick.com",
+        ...updates,
+      };
+      
+      const [created] = await db
+        .insert(profileTable)
+        .values(defaultProfile)
+        .returning();
+      return created;
+    }
+
+    const [updated] = await db
+      .update(profileTable)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(profileTable.id, existing.id))
+      .returning();
+    return updated;
+  }
+}
+
+// Use DatabaseStorage if DATABASE_URL is available, otherwise fall back to MemStorage
+export const storage = process.env.DATABASE_URL ? new DatabaseStorage() : new MemStorage();
