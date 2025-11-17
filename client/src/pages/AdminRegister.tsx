@@ -6,31 +6,53 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Lock } from "lucide-react";
+import { UserPlus } from "lucide-react";
 
-export default function AdminLogin() {
+export default function AdminRegister() {
   const [, setLocation] = useLocation();
-  const [credentials, setCredentials] = useState({ username: "", password: "" });
+  const [credentials, setCredentials] = useState({ username: "", password: "", confirmPassword: "" });
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (credentials.password !== credentials.confirmPassword) {
+      toast({
+        title: "Passwords don't match",
+        description: "Please make sure both passwords are the same",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (credentials.password.length < 6) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 6 characters long",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      await apiRequest("POST", "/api/auth/login", credentials);
+      await apiRequest("POST", "/api/auth/register", {
+        username: credentials.username,
+        password: credentials.password,
+      });
 
       toast({
-        title: "Login successful",
-        description: "Welcome to the admin panel",
+        title: "Account created",
+        description: "Your admin account has been created successfully",
       });
 
       setLocation("/admin");
     } catch (error: any) {
       toast({
-        title: "Login failed",
-        description: error.message || "Invalid credentials",
+        title: "Registration failed",
+        description: error.message || "Username may already exist",
         variant: "destructive",
       });
     } finally {
@@ -43,13 +65,13 @@ export default function AdminLogin() {
       <Card className="w-full max-w-md p-8">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-            <Lock className="h-8 w-8 text-primary" />
+            <UserPlus className="h-8 w-8 text-primary" />
           </div>
           <h1 className="font-display text-3xl font-bold text-foreground mb-2">
-            Admin Panel
+            Create Admin Account
           </h1>
           <p className="text-muted-foreground">
-            Sign in to manage your portfolio
+            Set up your admin credentials to manage your portfolio
           </p>
         </div>
 
@@ -78,7 +100,23 @@ export default function AdminLogin() {
                 setCredentials({ ...credentials, password: e.target.value })
               }
               required
+              minLength={6}
               data-testid="input-password"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              value={credentials.confirmPassword}
+              onChange={(e) =>
+                setCredentials({ ...credentials, confirmPassword: e.target.value })
+              }
+              required
+              minLength={6}
+              data-testid="input-confirm-password"
             />
           </div>
 
@@ -86,20 +124,20 @@ export default function AdminLogin() {
             type="submit"
             className="w-full"
             disabled={isLoading}
-            data-testid="button-login"
+            data-testid="button-register"
           >
-            {isLoading ? "Signing in..." : "Sign In"}
+            {isLoading ? "Creating Account..." : "Create Admin Account"}
           </Button>
 
           <p className="text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <button
               type="button"
-              onClick={() => setLocation("/admin/register")}
+              onClick={() => setLocation("/admin/login")}
               className="text-primary hover:underline"
-              data-testid="link-register"
+              data-testid="link-login"
             >
-              Create one
+              Sign in
             </button>
           </p>
         </form>
