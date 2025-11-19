@@ -1,6 +1,6 @@
 interface DeviceFrameProps {
   imageUrl: string;
-  deviceType: "monitor" | "phone";
+  deviceType: "monitor" | "phone" | "tablet";
   alt: string;
 }
 
@@ -17,6 +17,24 @@ export default function DeviceFrame({ imageUrl, deviceType, alt }: DeviceFramePr
               className="w-full h-full object-cover object-top"
             />
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (deviceType === "tablet") {
+    return (
+      <div className="relative mx-auto" style={{ width: "420px" }}>
+        <div className="relative bg-card border-[12px] border-foreground/90 rounded-[2rem] shadow-xl overflow-hidden">
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-2 h-2 bg-foreground/40 rounded-full z-10"></div>
+          <div className="aspect-[3/4] bg-background overflow-hidden">
+            <img
+              src={imageUrl}
+              alt={alt}
+              className="w-full h-full object-cover object-top"
+            />
+          </div>
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border-2 border-foreground/40 z-10"></div>
         </div>
       </div>
     );
