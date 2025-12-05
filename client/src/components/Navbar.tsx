@@ -113,22 +113,23 @@ export default function Navbar() {
             </motion.button>
 
             <div className="hidden items-center justify-center flex-1 md:flex">
-              <div className="flex items-center justify-between w-full max-w-xl">
+              <div className="flex items-center justify-center gap-2">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   return (
                     <motion.div key={item.label} className="relative">
                       <Button
                         variant="ghost"
+                        size="lg"
                         onClick={() => scrollToSection(item.href)}
-                        className={`relative px-5 py-2.5 transition-all duration-300 font-semibold text-base ${
+                        className={`relative px-6 py-3 transition-all duration-300 font-semibold text-lg ${
                           activeSection === item.href.substring(1)
                             ? "text-primary"
                             : "text-foreground/80 hover:text-foreground"
                         }`}
                         data-testid={`button-nav-${item.label.toLowerCase()}`}
                       >
-                        <Icon className="w-4 h-4 mr-2" />
+                        <Icon className="w-5 h-5 mr-2" />
                         {item.label}
                       </Button>
                       {activeSection === item.href.substring(1) && (
