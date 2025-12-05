@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { SiTwitter, SiLinkedin, SiGithub } from "react-icons/si";
+import { Twitter, Linkedin, Github } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import PortfolioSection from "@/components/PortfolioSection";
@@ -7,9 +7,9 @@ import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
 
 const socialLinks = [
-  { icon: SiTwitter, href: "#", label: "Twitter" },
-  { icon: SiLinkedin, href: "#", label: "LinkedIn" },
-  { icon: SiGithub, href: "#", label: "GitHub" },
+  { icon: Twitter, href: "#", label: "Twitter" },
+  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Github, href: "#", label: "GitHub" },
 ];
 
 export default function Home() {

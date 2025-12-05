@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Mail, Clock, CheckCircle2, Send, MessageSquare } from "lucide-react";
-import { SiWhatsapp, SiTwitter, SiLinkedin, SiGithub } from "react-icons/si";
+import { SiWhatsapp } from "react-icons/si";
+import { Twitter, Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -13,9 +14,9 @@ const WHATSAPP_NUMBER = "+2349046490562";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, "")}`;
 
 const socialLinks = [
-  { icon: SiTwitter, href: "#", label: "Twitter" },
-  { icon: SiLinkedin, href: "#", label: "LinkedIn" },
-  { icon: SiGithub, href: "#", label: "GitHub" },
+  { icon: Twitter, href: "#", label: "Twitter" },
+  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Github, href: "#", label: "GitHub" },
 ];
 
 export default function ContactSection() {
