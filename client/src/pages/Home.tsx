@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Twitter, Linkedin, Github } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import BrandLogo from "@/components/BrandLogo";
 import HeroSection from "@/components/HeroSection";
 import PortfolioSection from "@/components/PortfolioSection";
 import AboutSection from "@/components/AboutSection";
@@ -15,6 +16,7 @@ const socialLinks = [
 export default function Home() {
   return (
     <div className="min-h-screen w-full bg-background">
+      <BrandLogo />
       <Navbar />
       <HeroSection />
       
