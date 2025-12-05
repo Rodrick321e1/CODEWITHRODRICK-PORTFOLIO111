@@ -1,13 +1,9 @@
 import { google } from 'googleapis';
 
-let connectionSettings: any;
+let connectionSettings: any = null;
 
-async function getAccessToken() {
-  if (connectionSettings && connectionSettings.settings.expires_at && new Date(connectionSettings.settings.expires_at).getTime() > Date.now()) {
-    return connectionSettings.settings.access_token;
-  }
-  
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME
+async function getConnectionSettings() {
+  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
   const xReplitToken = process.env.REPL_IDENTITY 
     ? 'repl ' + process.env.REPL_IDENTITY 
     : process.env.WEB_REPL_RENEWAL 
@@ -18,7 +14,11 @@ async function getAccessToken() {
     throw new Error('X_REPLIT_TOKEN not found for repl/depl');
   }
 
-  connectionSettings = await fetch(
+  if (!hostname) {
+    throw new Error('REPLIT_CONNECTORS_HOSTNAME not set');
+  }
+
+  const response = await fetch(
     'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=google-mail',
     {
       headers: {
@@ -26,18 +26,46 @@ async function getAccessToken() {
         'X_REPLIT_TOKEN': xReplitToken
       }
     }
-  ).then(res => res.json()).then(data => data.items?.[0]);
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch connection settings: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data.items?.[0];
+}
+
+async function getAccessToken() {
+  if (connectionSettings && connectionSettings.settings?.expires_at && new Date(connectionSettings.settings.expires_at).getTime() > Date.now()) {
+    return connectionSettings.settings.access_token;
+  }
+  
+  connectionSettings = await getConnectionSettings();
 
   if (!connectionSettings) {
-    throw new Error('Gmail not connected');
+    throw new Error('Gmail not connected. Please connect Gmail in the Integrations panel.');
   }
 
   const accessToken = connectionSettings?.settings?.access_token || connectionSettings?.settings?.oauth?.credentials?.access_token;
 
   if (!accessToken) {
-    throw new Error('Gmail access token not available');
+    throw new Error('Gmail access token not available. Please reconnect Gmail.');
   }
+  
   return accessToken;
+}
+
+function getConnectedEmail(): string {
+  const email = connectionSettings?.settings?.email || 
+                connectionSettings?.settings?.oauth?.email ||
+                connectionSettings?.account_info?.email;
+  
+  if (!email) {
+    throw new Error('Could not determine sender email from Gmail connection');
+  }
+  
+  return email;
 }
 
 export async function getUncachableGmailClient() {
@@ -52,10 +80,8 @@ export async function getUncachableGmailClient() {
 }
 
 function sanitizeEmail(email: string): string {
-  // Remove any newline characters to prevent header injection
   const sanitized = email.replace(/[\r\n]/g, '');
   
-  // Basic email validation pattern
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   
   if (!emailPattern.test(sanitized)) {
@@ -68,10 +94,20 @@ function sanitizeEmail(email: string): string {
 export async function sendEmail(to: string, subject: string, htmlBody: string, replyTo?: string) {
   const gmail = await getUncachableGmailClient();
   
-  const profileResponse = await gmail.users.getProfile({ userId: 'me' });
-  const fromEmail = profileResponse.data.emailAddress;
+  let fromEmail: string;
   
-  // Sanitize all email addresses
+  try {
+    fromEmail = getConnectedEmail();
+  } catch (e) {
+    try {
+      const profileResponse = await gmail.users.getProfile({ userId: 'me' });
+      fromEmail = profileResponse.data.emailAddress || '';
+    } catch (profileError: any) {
+      console.error('Could not get email from profile, using default:', profileError.message);
+      fromEmail = 'noreply@example.com';
+    }
+  }
+  
   const sanitizedTo = sanitizeEmail(to);
   const sanitizedReplyTo = replyTo ? sanitizeEmail(replyTo) : undefined;
   
