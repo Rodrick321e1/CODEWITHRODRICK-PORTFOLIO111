@@ -141,33 +141,42 @@ export default function AboutSection() {
                   </motion.div>
                   
                   <div className="absolute inset-8 rounded-full overflow-hidden border-4 border-primary/20 bg-gradient-to-br from-primary/20 via-cyan-400/10 to-purple-500/10 backdrop-blur-sm">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="relative">
-                        <svg viewBox="0 0 100 140" className="w-32 h-44 lg:w-40 lg:h-56">
-                          <defs>
-                            <linearGradient id="silhouetteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="hsl(217, 91%, 60%)" stopOpacity="0.6" />
-                              <stop offset="50%" stopColor="hsl(190, 95%, 55%)" stopOpacity="0.4" />
-                              <stop offset="100%" stopColor="hsl(270, 91%, 65%)" stopOpacity="0.3" />
-                            </linearGradient>
-                            <filter id="glow">
-                              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                              <feMerge>
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                              </feMerge>
-                            </filter>
-                          </defs>
-                          <ellipse cx="50" cy="30" rx="22" ry="26" fill="url(#silhouetteGradient)" filter="url(#glow)" />
-                          <path d="M50 56 C20 56 10 85 10 120 L10 140 L90 140 L90 120 C90 85 80 56 50 56" fill="url(#silhouetteGradient)" filter="url(#glow)" />
-                        </svg>
-                        <motion.div
-                          className="absolute inset-0"
-                          animate={{ opacity: [0.5, 1, 0.5] }}
-                          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        />
+                    {profile?.profileImageUrl ? (
+                      <img
+                        src={profile.profileImageUrl}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                        data-testid="img-profile"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="relative">
+                          <svg viewBox="0 0 100 140" className="w-32 h-44 lg:w-40 lg:h-56">
+                            <defs>
+                              <linearGradient id="silhouetteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="hsl(217, 91%, 60%)" stopOpacity="0.6" />
+                                <stop offset="50%" stopColor="hsl(190, 95%, 55%)" stopOpacity="0.4" />
+                                <stop offset="100%" stopColor="hsl(270, 91%, 65%)" stopOpacity="0.3" />
+                              </linearGradient>
+                              <filter id="glow">
+                                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                <feMerge>
+                                  <feMergeNode in="coloredBlur"/>
+                                  <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                              </filter>
+                            </defs>
+                            <ellipse cx="50" cy="30" rx="22" ry="26" fill="url(#silhouetteGradient)" filter="url(#glow)" />
+                            <path d="M50 56 C20 56 10 85 10 120 L10 140 L90 140 L90 120 C90 85 80 56 50 56" fill="url(#silhouetteGradient)" filter="url(#glow)" />
+                          </svg>
+                          <motion.div
+                            className="absolute inset-0"
+                            animate={{ opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
