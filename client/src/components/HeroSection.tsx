@@ -258,14 +258,15 @@ export default function HeroSection() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 1 }}
       >
-        <motion.div
+        <motion.button
           className="p-3 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-sm cursor-pointer neon-glow-sm"
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           onClick={() => scrollToSection("portfolio")}
+          data-testid="button-scroll-down"
         >
           <ArrowDown className="h-5 w-5 text-primary" />
-        </motion.div>
+        </motion.button>
       </motion.div>
     </section>
   );

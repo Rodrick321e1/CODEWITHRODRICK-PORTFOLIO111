@@ -255,7 +255,7 @@ export default function ContactSection() {
               </div>
             </div>
 
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="block">
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="block" data-testid="link-whatsapp-contact">
               <motion.div
                 className="card-futuristic p-6 cursor-pointer group"
                 style={{ borderColor: "hsl(142, 70%, 45%, 0.3)" }}

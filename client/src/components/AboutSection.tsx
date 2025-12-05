@@ -226,6 +226,7 @@ export default function AboutSection() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     whileHover={{ y: -5, scale: 1.02 }}
+                    data-testid={`card-highlight-${item.title.toLowerCase().replace(/\s/g, '-')}`}
                   >
                     <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 neon-glow-sm">
                       <item.icon className="h-6 w-6 text-primary" />
