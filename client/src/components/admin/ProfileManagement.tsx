@@ -84,10 +84,18 @@ export default function ProfileManagement() {
       }
 
       const data = await res.json();
-      setProfileImage(data.imageUrl);
+      const newImageUrl = data.imageUrl;
+      setProfileImage(newImageUrl);
+
+      await apiRequest("PATCH", "/api/profile/image", {
+        profileImageUrl: newImageUrl,
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["/api/profile"] });
+
       toast({
-        title: "Image uploaded",
-        description: "Your profile picture has been uploaded successfully",
+        title: "Profile picture updated",
+        description: "Your profile picture has been saved and is now visible on your site",
       });
     } catch (error: any) {
       toast({

@@ -291,6 +291,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.patch("/api/profile/image", requireAuth, async (req, res) => {
+    try {
+      const { profileImageUrl } = req.body;
+      const profile = await storage.updateProfile({ profileImageUrl });
+      res.json(profile);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
   // Contact Form Email Route
   app.post("/api/contact", async (req, res) => {
     try {
