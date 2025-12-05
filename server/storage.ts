@@ -44,7 +44,7 @@ export class MemStorage implements IStorage {
       bio2: "My approach combines clean code with stunning design. I believe every website should not only look great but also provide an exceptional user experience. From concept to launch, I'm dedicated to bringing your vision to life.",
       bio3: "When I'm not coding, you'll find me exploring new design trends, contributing to open-source projects, or enjoying a good cup of coffee while sketching out my next creative idea.",
       skills: ["React", "TypeScript", "Node.js", "Tailwind CSS", "UI/UX Design", "Responsive Design", "API Development", "Database Design"],
-      contactEmail: "hello@codewithrodrick.com",
+      contactEmail: "rodrickadeboye@gmail.com",
       updatedAt: new Date(),
     };
   }
@@ -164,7 +164,7 @@ export class MemStorage implements IStorage {
         bio2: "",
         bio3: "",
         skills: [],
-        contactEmail: "hello@codewithrodrick.com",
+        contactEmail: "rodrickadeboye@gmail.com",
         updatedAt: new Date(),
       };
     }
