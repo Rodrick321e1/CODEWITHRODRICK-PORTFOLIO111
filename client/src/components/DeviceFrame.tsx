@@ -94,9 +94,8 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
 
   return (
     <div className="relative mx-auto" style={{ maxWidth: "600px" }}>
-      <div className="relative bg-neutral-800 rounded-t-xl p-2 shadow-2xl border-4 border-neutral-900">
-        <div className="absolute top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-neutral-600 rounded-full"></div>
-        <div className="aspect-[16/10] bg-neutral-950 rounded-md overflow-hidden relative mt-2">
+      <div className="relative bg-neutral-900 rounded-sm p-[3px] shadow-2xl">
+        <div className="aspect-[16/9] bg-neutral-950 rounded-sm overflow-hidden relative">
           <img
             src={images[currentIndex]}
             alt={alt}
@@ -104,11 +103,11 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
           />
           <NavigationArrows />
         </div>
+        <div className="absolute bottom-[3px] left-1/2 -translate-x-1/2 w-16 h-[2px] bg-neutral-700 rounded-full"></div>
       </div>
-      <div className="relative mx-auto" style={{ width: "40%" }}>
-        <div className="h-6 bg-gradient-to-b from-neutral-800 to-neutral-700 rounded-b-sm"></div>
-        <div className="h-3 bg-gradient-to-b from-neutral-700 to-neutral-600 mx-auto" style={{ width: "80%" }}></div>
-        <div className="h-2 bg-neutral-800 rounded-b-lg shadow-lg mx-auto" style={{ width: "120%" , marginLeft: "-10%" }}></div>
+      <div className="relative mx-auto flex flex-col items-center">
+        <div className="w-4 h-12 bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-800 rounded-sm"></div>
+        <div className="w-32 h-3 bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-sm shadow-lg"></div>
       </div>
     </div>
   );
