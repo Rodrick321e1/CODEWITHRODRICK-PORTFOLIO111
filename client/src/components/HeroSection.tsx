@@ -8,12 +8,24 @@ import carouselImg1 from "@assets/stock_images/professional_person__8a150da6.jpg
 import carouselImg2 from "@assets/stock_images/professional_person__e1111a2a.jpg";
 import carouselImg3 from "@assets/stock_images/professional_person__6e5687f0.jpg";
 import carouselImg4 from "@assets/stock_images/professional_person__bb1a329b.jpg";
+import carouselImg5 from "@assets/stock_images/african_american_pro_02a80de5.jpg";
+import carouselImg6 from "@assets/stock_images/african_american_pro_32b05c32.jpg";
+import carouselImg7 from "@assets/stock_images/african_american_man_32f58a34.jpg";
+import carouselImg8 from "@assets/stock_images/african_american_man_ebd4f7db.jpg";
+import carouselImg9 from "@assets/stock_images/diverse_team_of_prof_bac9755b.jpg";
+import carouselImg10 from "@assets/stock_images/diverse_team_of_prof_4f380972.jpg";
 
 const carouselImages = [
   { src: carouselImg1, alt: "Happy client using website on laptop" },
+  { src: carouselImg5, alt: "Professional woman working on laptop" },
   { src: carouselImg2, alt: "Professional reviewing web design" },
+  { src: carouselImg7, alt: "Developer reviewing website design" },
   { src: carouselImg3, alt: "Team collaborating on digital project" },
+  { src: carouselImg9, alt: "Diverse team collaborating on project" },
   { src: carouselImg4, alt: "Client satisfied with website results" },
+  { src: carouselImg6, alt: "Professional working at computer" },
+  { src: carouselImg8, alt: "Designer reviewing work" },
+  { src: carouselImg10, alt: "Team meeting on digital project" },
 ];
 
 const WHATSAPP_NUMBER = "+2349046490562";

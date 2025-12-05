@@ -20,7 +20,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Plus, GripVertical } from "lucide-react";
 import type { Project } from "@shared/schema";
 
 interface ProjectDialogProps {
@@ -34,11 +34,13 @@ export default function ProjectDialog({ open, onOpenChange, project }: ProjectDi
     title: "",
     description: "",
     imageUrl: "",
+    imageUrls: [] as string[],
     deviceType: "monitor",
     tags: [] as string[],
   });
   const [tagInput, setTagInput] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadingAdditional, setUploadingAdditional] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -47,6 +49,7 @@ export default function ProjectDialog({ open, onOpenChange, project }: ProjectDi
         title: project.title,
         description: project.description,
         imageUrl: project.imageUrl,
+        imageUrls: project.imageUrls || [],
         deviceType: project.deviceType,
         tags: project.tags || [],
       });
@@ -55,6 +58,7 @@ export default function ProjectDialog({ open, onOpenChange, project }: ProjectDi
         title: "",
         description: "",
         imageUrl: "",
+        imageUrls: [],
         deviceType: "monitor",
         tags: [],
       });
@@ -122,6 +126,53 @@ export default function ProjectDialog({ open, onOpenChange, project }: ProjectDi
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleAdditionalImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingAdditional(true);
+    const formDataUpload = new FormData();
+    formDataUpload.append("image", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await res.json();
+      setFormData({ 
+        ...formData, 
+        imageUrls: [...formData.imageUrls, data.imageUrl] 
+      });
+      toast({
+        title: "Image uploaded",
+        description: "Additional image has been added",
+      });
+    } catch (err) {
+      const error = err as Error;
+      toast({
+        title: "Upload failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setUploadingAdditional(false);
+    }
+  };
+
+  const handleRemoveAdditionalImage = (index: number) => {
+    setFormData({
+      ...formData,
+      imageUrls: formData.imageUrls.filter((_, i) => i !== index),
+    });
   };
 
   const handleAddTag = () => {
@@ -204,13 +255,14 @@ export default function ProjectDialog({ open, onOpenChange, project }: ProjectDi
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="monitor">Monitor</SelectItem>
+                <SelectItem value="tablet">Tablet</SelectItem>
                 <SelectItem value="phone">Phone</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label>Project Image</Label>
+            <Label>Main Project Image</Label>
             {formData.imageUrl ? (
               <div className="relative">
                 <img
@@ -251,6 +303,61 @@ export default function ProjectDialog({ open, onOpenChange, project }: ProjectDi
                 />
               </div>
             )}
+          </div>
+
+          <div className="space-y-2">
+            <Label>Additional Images (for multi-page apps/websites)</Label>
+            <p className="text-sm text-muted-foreground mb-2">
+              Add more images for projects with multiple pages. Users can swipe through them in the device display.
+            </p>
+            
+            {formData.imageUrls.length > 0 && (
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {formData.imageUrls.map((url, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={url}
+                      alt={`Additional ${index + 1}`}
+                      className="w-full h-24 object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveAdditionalImage(index)}
+                      className="absolute top-1 right-1 w-6 h-6 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      data-testid={`button-remove-additional-image-${index}`}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                    <div className="absolute bottom-1 left-1 w-5 h-5 bg-background/80 rounded text-xs flex items-center justify-center">
+                      {index + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
+              <label htmlFor="additional-image-upload" className="cursor-pointer">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={uploadingAdditional}
+                  data-testid="button-upload-additional-image"
+                  onClick={() => document.getElementById("additional-image-upload")?.click()}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  {uploadingAdditional ? "Uploading..." : "Add Another Image"}
+                </Button>
+              </label>
+              <input
+                id="additional-image-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAdditionalImageUpload}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

@@ -116,14 +116,15 @@ export default function PortfolioSection() {
                   data-testid={`card-project-${project.id}`}
                 >
                   <div className="relative overflow-hidden rounded-t-xl">
-                    <div className="bg-gradient-to-br from-primary/5 to-cyan-500/5 p-8">
+                    <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800/50 dark:to-slate-900/50 p-8">
                       <motion.div
                         whileHover={{ scale: 1.02 }}
                         transition={{ duration: 0.3 }}
                       >
                         <DeviceFrame
                           imageUrl={project.imageUrl}
-                          deviceType={project.deviceType as "monitor" | "phone"}
+                          imageUrls={(project as any).imageUrls}
+                          deviceType={project.deviceType as "monitor" | "phone" | "tablet"}
                           alt={project.title}
                         />
                       </motion.div>

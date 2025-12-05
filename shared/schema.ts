@@ -16,6 +16,7 @@ export const projects = pgTable("projects", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   imageUrl: text("image_url").notNull(),
+  imageUrls: text("image_urls").array().notNull().default(sql`ARRAY[]::text[]`),
   deviceType: text("device_type").notNull().default("monitor"),
   tags: text("tags").array().notNull().default(sql`ARRAY[]::text[]`),
   orderIndex: varchar("order_index").notNull().default("0"),

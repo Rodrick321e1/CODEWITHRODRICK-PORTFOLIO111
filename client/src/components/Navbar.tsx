@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Home, Briefcase, User, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
-  { label: "Home", href: "#home" },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "#home", icon: Home },
+  { label: "Portfolio", href: "#portfolio", icon: Briefcase },
+  { label: "About", href: "#about", icon: User },
+  { label: "Contact", href: "#contact", icon: Mail },
 ];
 
 export default function Navbar() {
@@ -112,32 +112,38 @@ export default function Navbar() {
               />
             </motion.button>
 
-            <div className="hidden items-center gap-2 md:flex">
-              {navItems.map((item) => (
-                <motion.div key={item.label} className="relative">
-                  <Button
-                    variant="ghost"
-                    onClick={() => scrollToSection(item.href)}
-                    className={`relative px-4 py-2 transition-all duration-300 ${
-                      activeSection === item.href.substring(1)
-                        ? "text-primary"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                    data-testid={`button-nav-${item.label.toLowerCase()}`}
-                  >
-                    {item.label}
-                  </Button>
-                  {activeSection === item.href.substring(1) && (
-                    <motion.div
-                      className="absolute -bottom-1 left-1/2 h-0.5 bg-primary rounded-full neon-glow-sm"
-                      layoutId="activeNavIndicator"
-                      initial={{ width: 0, x: "-50%" }}
-                      animate={{ width: "60%", x: "-50%" }}
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                </motion.div>
-              ))}
+            <div className="hidden items-center justify-center flex-1 md:flex">
+              <div className="flex items-center justify-between w-full max-w-xl">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <motion.div key={item.label} className="relative">
+                      <Button
+                        variant="ghost"
+                        onClick={() => scrollToSection(item.href)}
+                        className={`relative px-5 py-2.5 transition-all duration-300 font-semibold text-base ${
+                          activeSection === item.href.substring(1)
+                            ? "text-primary"
+                            : "text-foreground/80 hover:text-foreground"
+                        }`}
+                        data-testid={`button-nav-${item.label.toLowerCase()}`}
+                      >
+                        <Icon className="w-4 h-4 mr-2" />
+                        {item.label}
+                      </Button>
+                      {activeSection === item.href.substring(1) && (
+                        <motion.div
+                          className="absolute -bottom-1 left-1/2 h-0.5 bg-primary rounded-full neon-glow-sm"
+                          layoutId="activeNavIndicator"
+                          initial={{ width: 0, x: "-50%" }}
+                          animate={{ width: "70%", x: "-50%" }}
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        />
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
 
             <Button
@@ -173,27 +179,31 @@ export default function Navbar() {
           >
             <div className="absolute inset-0 bg-background/95 backdrop-blur-xl" />
             <div className="relative flex h-full flex-col items-center justify-center gap-8">
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -30 }}
-                  transition={{ delay: index * 0.1, duration: 0.3 }}
-                >
-                  <button
-                    onClick={() => scrollToSection(item.href)}
-                    className={`font-display text-4xl font-bold transition-all duration-300 ${
-                      activeSection === item.href.substring(1)
-                        ? "gradient-text neon-text"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                    data-testid={`button-mobile-nav-${item.label.toLowerCase()}`}
+              {navItems.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{ delay: index * 0.1, duration: 0.3 }}
                   >
-                    {item.label}
-                  </button>
-                </motion.div>
-              ))}
+                    <button
+                      onClick={() => scrollToSection(item.href)}
+                      className={`flex items-center gap-3 font-display text-4xl font-bold transition-all duration-300 ${
+                        activeSection === item.href.substring(1)
+                          ? "gradient-text neon-text"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                      data-testid={`button-mobile-nav-${item.label.toLowerCase()}`}
+                    >
+                      <Icon className="w-8 h-8" />
+                      {item.label}
+                    </button>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         )}
