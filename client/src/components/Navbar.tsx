@@ -91,9 +91,9 @@ export default function Navbar() {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between">
+          <div className="flex h-20 items-center justify-between relative">
             <motion.button
-              className="font-display text-2xl font-bold gradient-text relative group"
+              className="font-display text-2xl font-bold gradient-text relative group z-10"
               onClick={handleLogoClick}
               onPointerDown={handleLogoPointerDown}
               onPointerUp={handleLogoPointerUp}
@@ -112,7 +112,7 @@ export default function Navbar() {
               />
             </motion.button>
 
-            <div className="hidden items-center justify-center flex-1 md:flex">
+            <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
               <div className="flex items-center justify-center gap-2">
                 {navItems.map((item) => {
                   const Icon = item.icon;
