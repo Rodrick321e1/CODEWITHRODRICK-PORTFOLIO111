@@ -52,9 +52,9 @@ Preferred communication style: Simple, everyday language.
 ### Data Storage
 
 **Database**
-- **PostgreSQL** via Neon serverless driver (`@neondatabase/serverless`)
+- **PostgreSQL** via Supabase (using connection pooler for serverless compatibility)
 - **Drizzle ORM** for type-safe database queries and schema management
-- Connection via `DATABASE_URL` environment variable
+- Connection via `DATABASE_URL` environment variable (Supabase pooler URL)
 
 **Schema Design** (in `shared/schema.ts`)
 - **admin_users**: Admin authentication (id, username, hashed password)
