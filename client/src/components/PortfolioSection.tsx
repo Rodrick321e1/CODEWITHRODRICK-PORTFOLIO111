@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Layers } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ExternalLink, Layers, Eye } from "lucide-react";
 import DeviceFrame from "./DeviceFrame";
 import ProjectDetailModal from "./ProjectDetailModal";
 import type { Project } from "@shared/schema";
@@ -166,6 +167,17 @@ export default function PortfolioSection() {
                         )}
                       </div>
                     )}
+                    <Button
+                      className="mt-4 w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleProjectClick(project);
+                      }}
+                      data-testid={`button-view-project-${project.id}`}
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Project
+                    </Button>
                   </div>
                 </div>
               </motion.div>
