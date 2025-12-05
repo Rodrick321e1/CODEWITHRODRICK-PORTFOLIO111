@@ -81,67 +81,82 @@ export default function Navbar() {
   return (
     <>
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm"
+            ? "glassmorphism border-b border-primary/10 shadow-lg shadow-primary/5"
             : "bg-transparent"
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
+          <div className="flex h-20 items-center justify-between">
             <motion.button
-              className="font-display text-xl font-bold text-primary"
+              className="font-display text-2xl font-bold gradient-text relative group"
               onClick={handleLogoClick}
               onPointerDown={handleLogoPointerDown}
               onPointerUp={handleLogoPointerUp}
               onPointerLeave={handleLogoPointerLeave}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               data-testid="button-logo"
             >
-              CODEWITHRODRICK
+              <span className="relative z-10">CODEWITHRODRICK</span>
+              <motion.span
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: "linear-gradient(90deg, hsl(217 91% 60% / 0.2), hsl(190 95% 55% / 0.2))",
+                  filter: "blur(8px)",
+                }}
+              />
             </motion.button>
 
-            <div className="hidden items-center gap-1 md:flex">
+            <div className="hidden items-center gap-2 md:flex">
               {navItems.map((item) => (
-                <Button
-                  key={item.label}
-                  variant="ghost"
-                  onClick={() => scrollToSection(item.href)}
-                  className={`relative ${
-                    activeSection === item.href.substring(1)
-                      ? "text-primary"
-                      : "text-foreground"
-                  }`}
-                  data-testid={`button-nav-${item.label.toLowerCase()}`}
-                >
-                  {item.label}
+                <motion.div key={item.label} className="relative">
+                  <Button
+                    variant="ghost"
+                    onClick={() => scrollToSection(item.href)}
+                    className={`relative px-4 py-2 transition-all duration-300 ${
+                      activeSection === item.href.substring(1)
+                        ? "text-primary"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                    data-testid={`button-nav-${item.label.toLowerCase()}`}
+                  >
+                    {item.label}
+                  </Button>
                   {activeSection === item.href.substring(1) && (
                     <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-                      layoutId="activeSection"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      className="absolute -bottom-1 left-1/2 h-0.5 bg-primary rounded-full neon-glow-sm"
+                      layoutId="activeNavIndicator"
+                      initial={{ width: 0, x: "-50%" }}
+                      animate={{ width: "60%", x: "-50%" }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     />
                   )}
-                </Button>
+                </motion.div>
               ))}
             </div>
 
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden text-foreground"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               data-testid="button-mobile-menu"
             >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              <motion.div
+                animate={{ rotate: isMobileMenuOpen ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </motion.div>
             </Button>
           </div>
         </div>
@@ -150,26 +165,28 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-background md:hidden"
+            className="fixed inset-0 z-40 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.3 }}
           >
-            <div className="flex h-full flex-col items-center justify-center gap-8">
+            <div className="absolute inset-0 bg-background/95 backdrop-blur-xl" />
+            <div className="relative flex h-full flex-col items-center justify-center gap-8">
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
                 >
                   <button
                     onClick={() => scrollToSection(item.href)}
-                    className={`font-display text-3xl font-semibold transition-colors ${
+                    className={`font-display text-4xl font-bold transition-all duration-300 ${
                       activeSection === item.href.substring(1)
-                        ? "text-primary"
-                        : "text-foreground hover:text-primary"
+                        ? "gradient-text neon-text"
+                        : "text-muted-foreground hover:text-foreground"
                     }`}
                     data-testid={`button-mobile-nav-${item.label.toLowerCase()}`}
                   >
