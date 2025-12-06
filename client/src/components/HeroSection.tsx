@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowDown, Sparkles, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiWhatsapp } from "react-icons/si";
@@ -33,6 +33,24 @@ const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, "")}`;
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  // Preload all carousel images for seamless transitions
+  useEffect(() => {
+    const preloadImages = async () => {
+      const imagePromises = carouselImages.map((img) => {
+        return new Promise<void>((resolve) => {
+          const image = new Image();
+          image.src = img.src;
+          image.onload = () => resolve();
+          image.onerror = () => resolve(); // Continue even if one fails
+        });
+      });
+      await Promise.all(imagePromises);
+      setImagesLoaded(true);
+    };
+    preloadImages();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -217,18 +235,25 @@ export default function HeroSection() {
                 
                 <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-card/50 backdrop-blur-sm p-2">
                   <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-                    <AnimatePresence mode="wait">
+                    {/* Show all images stacked, animate opacity for seamless crossfade */}
+                    {carouselImages.map((img, index) => (
                       <motion.img
-                        key={currentSlide}
-                        src={carouselImages[currentSlide].src}
-                        alt={carouselImages[currentSlide].alt}
+                        key={index}
+                        src={img.src}
+                        alt={img.alt}
                         className="absolute inset-0 h-full w-full object-cover"
-                        initial={{ opacity: 0, x: 100 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -100 }}
-                        transition={{ duration: 0.5 }}
+                        initial={false}
+                        animate={{ 
+                          opacity: index === currentSlide ? 1 : 0,
+                          scale: index === currentSlide ? 1 : 1.05,
+                        }}
+                        transition={{ 
+                          duration: 0.8,
+                          ease: [0.4, 0, 0.2, 1],
+                        }}
+                        style={{ zIndex: index === currentSlide ? 1 : 0 }}
                       />
-                    </AnimatePresence>
+                    ))}
                     
                     <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                     
