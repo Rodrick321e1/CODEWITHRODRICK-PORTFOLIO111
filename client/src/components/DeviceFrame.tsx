@@ -57,9 +57,9 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
 
   if (deviceType === "phone") {
     return (
-      <div className="relative mx-auto" style={{ width: "280px" }}>
-        <div className="relative bg-neutral-800 border-[14px] border-neutral-900 rounded-[3rem] shadow-xl overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-6 bg-neutral-900 rounded-b-3xl z-10"></div>
+      <div className="relative mx-auto w-[140px] sm:w-[200px] md:w-[280px]">
+        <div className="relative bg-neutral-800 border-[8px] sm:border-[10px] md:border-[14px] border-neutral-900 rounded-[1.5rem] sm:rounded-[2rem] md:rounded-[3rem] shadow-xl overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 sm:w-24 md:w-40 h-3 sm:h-4 md:h-6 bg-neutral-900 rounded-b-xl sm:rounded-b-2xl md:rounded-b-3xl z-10"></div>
           <div className="aspect-[9/16] bg-neutral-950 overflow-hidden relative">
             <img
               src={images[currentIndex]}
@@ -75,9 +75,9 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
 
   if (deviceType === "tablet") {
     return (
-      <div className="relative mx-auto" style={{ width: "420px" }}>
-        <div className="relative bg-neutral-800 border-[12px] border-neutral-900 rounded-[2rem] shadow-xl overflow-hidden">
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-2 h-2 bg-neutral-700 rounded-full z-10"></div>
+      <div className="relative mx-auto w-[180px] sm:w-[280px] md:w-[420px]">
+        <div className="relative bg-neutral-800 border-[6px] sm:border-[8px] md:border-[12px] border-neutral-900 rounded-[1rem] sm:rounded-[1.5rem] md:rounded-[2rem] shadow-xl overflow-hidden">
+          <div className="absolute top-1 sm:top-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-neutral-700 rounded-full z-10"></div>
           <div className="aspect-[3/4] bg-neutral-950 overflow-hidden relative">
             <img
               src={images[currentIndex]}
@@ -86,15 +86,15 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
             />
             <NavigationArrows />
           </div>
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-10 h-10 rounded-full border-2 border-neutral-700 z-10"></div>
+          <div className="absolute bottom-1 sm:bottom-2 left-1/2 -translate-x-1/2 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full border-2 border-neutral-700 z-10"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="relative mx-auto" style={{ maxWidth: "600px" }}>
-      <div className="relative bg-neutral-900 rounded-sm p-[3px] shadow-2xl">
+    <div className="relative mx-auto w-full max-w-[280px] sm:max-w-[400px] md:max-w-[600px]">
+      <div className="relative bg-neutral-900 rounded-sm p-[2px] sm:p-[3px] shadow-2xl">
         <div className="aspect-[16/9] bg-neutral-950 rounded-sm overflow-hidden relative">
           <img
             src={images[currentIndex]}
@@ -103,11 +103,11 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
           />
           <NavigationArrows />
         </div>
-        <div className="absolute bottom-[3px] left-1/2 -translate-x-1/2 w-16 h-[2px] bg-neutral-700 rounded-full"></div>
+        <div className="absolute bottom-[2px] sm:bottom-[3px] left-1/2 -translate-x-1/2 w-10 sm:w-12 md:w-16 h-[1px] sm:h-[2px] bg-neutral-700 rounded-full"></div>
       </div>
       <div className="relative mx-auto flex flex-col items-center">
-        <div className="w-4 h-12 bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-800 rounded-sm"></div>
-        <div className="w-32 h-3 bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-sm shadow-lg"></div>
+        <div className="w-2 sm:w-3 md:w-4 h-6 sm:h-8 md:h-12 bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-800 rounded-sm"></div>
+        <div className="w-16 sm:w-24 md:w-32 h-2 sm:h-2.5 md:h-3 bg-gradient-to-b from-neutral-800 to-neutral-900 rounded-sm shadow-lg"></div>
       </div>
     </div>
   );
