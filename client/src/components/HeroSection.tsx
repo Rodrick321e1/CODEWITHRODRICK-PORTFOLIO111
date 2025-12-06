@@ -110,31 +110,31 @@ export default function HeroSection() {
         />
       </div>
 
-      <div className="relative z-10 flex min-h-screen items-center pt-20">
-        <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+      <div className="relative z-10 flex min-h-screen items-center pt-16 sm:pt-20">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16 items-center">
             <div className="flex flex-col justify-center order-2 lg:order-1">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="mb-8"
+                className="mb-4 sm:mb-8"
               >
-                <div className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium border border-primary/30 bg-primary/10 backdrop-blur-sm neon-glow-sm">
-                  <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+                <div className="inline-flex items-center gap-2 rounded-full px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-medium border border-primary/30 bg-primary/10 backdrop-blur-sm neon-glow-sm">
+                  <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-primary animate-pulse" />
                   <span className="text-primary" data-testid="badge-projects-metric">50+ Projects Delivered</span>
                 </div>
               </motion.div>
 
               <motion.h1
-                className="mb-8 font-display text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl"
+                className="mb-6 sm:mb-8 font-display text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <span className="block text-foreground mb-2" data-testid="text-hero-title">CODEWITHRODRICK</span>
+                <span className="block text-foreground mb-1 sm:mb-2" data-testid="text-hero-title">CODEWITHRODRICK</span>
                 <motion.span
-                  className="block gradient-text"
+                  className="block gradient-text text-2xl sm:text-4xl md:text-5xl lg:text-6xl"
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
@@ -145,7 +145,7 @@ export default function HeroSection() {
               </motion.h1>
 
               <motion.p
-                className="mb-10 text-lg text-muted-foreground lg:text-xl max-w-xl"
+                className="mb-6 sm:mb-10 text-base sm:text-lg text-muted-foreground lg:text-xl max-w-xl"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
@@ -155,7 +155,7 @@ export default function HeroSection() {
               </motion.p>
 
               <motion.div
-                className="flex flex-wrap gap-4"
+                className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 w-full sm:w-auto"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
@@ -163,10 +163,10 @@ export default function HeroSection() {
                 <Button
                   size="lg"
                   onClick={() => scrollToSection("portfolio")}
-                  className="group relative overflow-hidden bg-primary hover:bg-primary/90 neon-glow transition-all duration-300"
+                  className="group relative overflow-hidden bg-primary hover:bg-primary/90 neon-glow transition-all duration-300 w-full sm:w-auto"
                   data-testid="button-view-projects"
                 >
-                  <span className="relative z-10 flex items-center">
+                  <span className="relative z-10 flex items-center justify-center">
                     View Projects
                     <motion.span
                       className="ml-2 inline-block"
@@ -178,14 +178,14 @@ export default function HeroSection() {
                   </span>
                 </Button>
                 
-                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="block w-full sm:w-auto">
                   <Button
                     size="lg"
-                    className="group relative overflow-hidden border-2 border-[hsl(142,70%,45%)] bg-[hsl(142,70%,45%)]/10 text-[hsl(142,70%,45%)] hover:bg-[hsl(142,70%,45%)]/20 neon-glow-whatsapp transition-all duration-300"
+                    className="group relative overflow-hidden border-2 border-[hsl(142,70%,45%)] bg-[hsl(142,70%,45%)]/10 text-[hsl(142,70%,45%)] hover:bg-[hsl(142,70%,45%)]/20 neon-glow-whatsapp transition-all duration-300 w-full"
                     data-testid="button-whatsapp"
                   >
                     <SiWhatsapp className="mr-2 h-5 w-5" />
-                    Let's Chat on WhatsApp
+                    <span>WhatsApp</span>
                   </Button>
                 </a>
               </motion.div>
@@ -232,30 +232,35 @@ export default function HeroSection() {
                     
                     <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                     
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                      {carouselImages.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentSlide(index)}
-                          className={`h-2 rounded-full transition-all duration-300 ${
-                            index === currentSlide 
-                              ? "w-8 bg-primary neon-glow-sm" 
-                              : "w-2 bg-white/50 hover:bg-white/80"
-                          }`}
-                          data-testid={`button-carousel-dot-${index}`}
-                        />
-                      ))}
+                    <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-1 sm:gap-2">
+                      {carouselImages.map((_, index) => {
+                        const isNearCurrent = Math.abs(index - currentSlide) <= 2 || 
+                          (currentSlide <= 2 && index <= 4) || 
+                          (currentSlide >= carouselImages.length - 3 && index >= carouselImages.length - 5);
+                        return (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentSlide(index)}
+                            className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
+                              index === currentSlide 
+                                ? "w-4 sm:w-8 bg-primary neon-glow-sm" 
+                                : "w-1.5 sm:w-2 bg-white/50 hover:bg-white/80"
+                            } ${!isNearCurrent ? "hidden sm:block" : ""}`}
+                            data-testid={`button-carousel-dot-${index}`}
+                          />
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
 
                 <motion.div
-                  className="absolute -bottom-6 -right-6 h-24 w-24 rounded-full border border-primary/30 bg-card/80 backdrop-blur-sm flex items-center justify-center"
+                  className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 h-16 w-16 sm:h-24 sm:w-24 rounded-full border border-primary/30 bg-card/80 backdrop-blur-sm flex items-center justify-center hidden sm:flex"
                   animate={{ rotate: 360 }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 >
-                  <div className="h-16 w-16 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
-                    <MessageCircle className="h-8 w-8 text-white" />
+                  <div className="h-10 w-10 sm:h-16 sm:w-16 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
+                    <MessageCircle className="h-5 w-5 sm:h-8 sm:w-8 text-white" />
                   </div>
                 </motion.div>
               </div>

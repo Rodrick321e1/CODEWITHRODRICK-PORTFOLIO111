@@ -74,7 +74,7 @@ export default function ContactSection() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           className="mb-16 text-center"
           initial={{ opacity: 0, y: 30 }}
@@ -95,25 +95,25 @@ export default function ContactSection() {
             </div>
           </motion.div>
           <h2
-            className="mb-4 font-display text-4xl font-bold tracking-tight lg:text-5xl"
+            className="mb-4 font-display text-2xl sm:text-4xl font-bold tracking-tight lg:text-5xl"
             data-testid="text-contact-heading"
           >
             <span className="gradient-text">Get in Touch</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto" data-testid="text-contact-description">
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto" data-testid="text-contact-description">
             Have a project in mind? Let's work together to create something amazing
           </p>
         </motion.div>
 
-        <div className="grid gap-12 lg:grid-cols-2">
+        <div className="grid gap-8 sm:gap-12 lg:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="card-futuristic p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="card-futuristic p-4 sm:p-8">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-foreground">Name</Label>
                   <Input
@@ -197,15 +197,15 @@ export default function ContactSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="card-futuristic p-8">
+            <div className="card-futuristic p-4 sm:p-8">
               <h3
-                className="mb-6 font-display text-2xl font-semibold gradient-text"
+                className="mb-4 sm:mb-6 font-display text-xl sm:text-2xl font-semibold gradient-text"
                 data-testid="text-contact-info-heading"
               >
                 Let's Connect
               </h3>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <motion.div
                   className="flex items-start gap-4 group"
                   whileHover={{ x: 5 }}

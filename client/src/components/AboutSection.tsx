@@ -63,7 +63,7 @@ export default function AboutSection() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           className="mb-16 text-center"
           initial={{ opacity: 0, y: 30 }}
@@ -123,7 +123,7 @@ export default function AboutSection() {
                   }}
                 />
                 
-                <div className="relative h-72 w-72 lg:h-80 lg:w-80">
+                <div className="relative h-48 w-48 sm:h-72 sm:w-72 lg:h-80 lg:w-80">
                   <motion.div
                     className="absolute inset-0 rounded-full border-2 border-primary/30"
                     animate={{ rotate: 360 }}
@@ -151,7 +151,7 @@ export default function AboutSection() {
                     ) : (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div className="relative">
-                          <svg viewBox="0 0 100 140" className="w-32 h-44 lg:w-40 lg:h-56">
+                          <svg viewBox="0 0 100 140" className="w-20 h-28 sm:w-32 sm:h-44 lg:w-40 lg:h-56">
                             <defs>
                               <linearGradient id="silhouetteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" stopColor="hsl(217, 91%, 60%)" stopOpacity="0.6" />
@@ -183,7 +183,7 @@ export default function AboutSection() {
                 {[Code2, Palette, Rocket].map((Icon, index) => (
                   <motion.div
                     key={index}
-                    className="absolute h-10 w-10 rounded-full bg-card/80 backdrop-blur-sm border border-primary/20 flex items-center justify-center"
+                    className="absolute h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-card/80 backdrop-blur-sm border border-primary/20 items-center justify-center hidden sm:flex"
                     style={{
                       top: `${20 + index * 30}%`,
                       left: index % 2 === 0 ? "-15%" : "105%",
@@ -199,7 +199,7 @@ export default function AboutSection() {
                       ease: "easeInOut",
                     }}
                   >
-                    <Icon className="h-5 w-5 text-primary" />
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   </motion.div>
                 ))}
               </div>
@@ -213,19 +213,19 @@ export default function AboutSection() {
               transition={{ duration: 0.6 }}
             >
               <h2
-                className="mb-6 font-display text-4xl font-bold tracking-tight lg:text-5xl"
+                className="mb-4 sm:mb-6 font-display text-2xl sm:text-4xl font-bold tracking-tight lg:text-5xl text-center lg:text-left"
                 data-testid="text-about-heading"
               >
                 <span className="gradient-text">Hi, I'm Rodrick!</span>
               </h2>
 
-              <div className="space-y-4 text-lg text-muted-foreground">
+              <div className="space-y-3 sm:space-y-4 text-base sm:text-lg text-muted-foreground text-center lg:text-left">
                 <p data-testid="text-about-bio-1">{bio1}</p>
                 <p data-testid="text-about-bio-2">{bio2}</p>
                 <p data-testid="text-about-bio-3">{bio3}</p>
               </div>
 
-              <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              <div className="mt-6 sm:mt-10 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
                 {highlights.map((item, index) => (
                   <motion.div
                     key={item.title}
@@ -246,14 +246,14 @@ export default function AboutSection() {
                 ))}
               </div>
 
-              <div className="mt-10">
+              <div className="mt-6 sm:mt-10">
                 <h3
-                  className="mb-6 font-display text-xl font-semibold gradient-text"
+                  className="mb-4 sm:mb-6 font-display text-lg sm:text-xl font-semibold gradient-text text-center lg:text-left"
                   data-testid="text-skills-heading"
                 >
                   Skills & Expertise
                 </h3>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3 justify-center lg:justify-start">
                   {skills.map((skill, index) => {
                     const Icon = skillIcons[skill] || Zap;
                     return (

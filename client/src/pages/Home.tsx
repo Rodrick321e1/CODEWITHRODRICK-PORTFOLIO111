@@ -51,8 +51,8 @@ export default function Home() {
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
         />
         
-        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid gap-12 md:grid-cols-3 items-center">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 sm:gap-12 md:grid-cols-3 items-center text-center md:text-left">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -68,7 +68,7 @@ export default function Home() {
             </motion.div>
             
             <motion.div
-              className="flex justify-center gap-4"
+              className="flex justify-center gap-3 sm:gap-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

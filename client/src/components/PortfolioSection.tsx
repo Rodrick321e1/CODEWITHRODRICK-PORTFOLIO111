@@ -37,7 +37,7 @@ export default function PortfolioSection() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           className="mb-16 text-center"
           initial={{ opacity: 0, y: 30 }}
@@ -58,12 +58,12 @@ export default function PortfolioSection() {
             </div>
           </motion.div>
           <h2
-            className="mb-4 font-display text-4xl font-bold tracking-tight lg:text-5xl"
+            className="mb-4 font-display text-2xl sm:text-4xl font-bold tracking-tight lg:text-5xl"
             data-testid="text-portfolio-heading"
           >
             <span className="gradient-text">Featured Projects</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto" data-testid="text-portfolio-description">
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto" data-testid="text-portfolio-description">
             A showcase of my recent work and client collaborations, built with cutting-edge technology
           </p>
         </motion.div>
@@ -102,7 +102,7 @@ export default function PortfolioSection() {
             </Card>
           </motion.div>
         ) : (
-          <div className="grid gap-8 md:grid-cols-2 lg:gap-10">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:gap-10">
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}

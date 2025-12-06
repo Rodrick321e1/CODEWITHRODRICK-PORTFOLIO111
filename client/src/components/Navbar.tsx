@@ -90,10 +90,10 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 sm:h-20 items-center justify-between relative">
             <motion.button
-              className="font-display text-2xl font-bold gradient-text relative group z-10"
+              className="font-display text-lg sm:text-2xl font-bold gradient-text relative group z-10"
               onClick={handleLogoClick}
               onPointerDown={handleLogoPointerDown}
               onPointerUp={handleLogoPointerUp}
