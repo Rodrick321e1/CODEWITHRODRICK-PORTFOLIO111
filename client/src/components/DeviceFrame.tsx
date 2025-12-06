@@ -29,24 +29,26 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
       <>
         <button
           onClick={goToPrevious}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white/80 hover:text-white transition-all duration-200 backdrop-blur-sm"
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-black/50 hover:bg-black/70 text-white/90 hover:text-white transition-all duration-200 backdrop-blur-sm shadow-lg"
           data-testid="button-device-prev"
         >
           <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         <button
           onClick={goToNext}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white/80 hover:text-white transition-all duration-200 backdrop-blur-sm"
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full bg-black/50 hover:bg-black/70 text-white/90 hover:text-white transition-all duration-200 backdrop-blur-sm shadow-lg"
           data-testid="button-device-next"
         >
           <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
-        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 sm:gap-1.5 z-20">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
           {images.map((_, idx) => (
             <div
               key={idx}
-              className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full transition-all duration-200 ${
-                idx === currentIndex ? "bg-white w-2 sm:w-3" : "bg-white/50"
+              className={`rounded-full transition-all duration-200 shadow-sm ${
+                idx === currentIndex 
+                  ? "bg-white w-2.5 h-1.5 sm:w-3 sm:h-2" 
+                  : "bg-white/50 w-1.5 h-1.5 sm:w-2 sm:h-2"
               }`}
             />
           ))}
@@ -57,63 +59,121 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
 
   if (deviceType === "phone") {
     return (
-      <div className="relative mx-auto w-[120px] sm:w-[180px] md:w-[240px] px-1">
-        {/* Side buttons - volume (outside overflow container) */}
-        <div className="absolute left-0 top-[20%] w-[3px] h-4 sm:h-5 md:h-6 rounded-l-sm z-10" style={{ background: "linear-gradient(180deg, #4a4a4e, #3a3a3e)" }} />
-        <div className="absolute left-0 top-[28%] w-[3px] h-4 sm:h-5 md:h-6 rounded-l-sm z-10" style={{ background: "linear-gradient(180deg, #4a4a4e, #3a3a3e)" }} />
-        
-        {/* Side button - power (outside overflow container) */}
-        <div className="absolute right-0 top-[25%] w-[3px] h-6 sm:h-8 md:h-10 rounded-r-sm z-10" style={{ background: "linear-gradient(180deg, #4a4a4e, #3a3a3e)" }} />
-
-        {/* Phone frame with titanium/steel look */}
+      <div className="relative mx-auto w-[140px] sm:w-[200px] md:w-[260px]">
+        {/* Outer glow/shadow for depth */}
         <div 
-          className="relative rounded-[1.2rem] sm:rounded-[1.8rem] md:rounded-[2.5rem]"
+          className="absolute -inset-4 rounded-[2.5rem] sm:rounded-[3rem] md:rounded-[3.5rem] opacity-40 blur-xl"
           style={{
-            background: "linear-gradient(145deg, #2a2a2e 0%, #1a1a1e 50%, #0f0f12 100%)",
-            padding: "6px",
-            boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3)"
+            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.5), transparent 70%)"
+          }}
+        />
+        
+        {/* Main phone body - realistic titanium/aluminum frame */}
+        <div 
+          className="relative rounded-[1.8rem] sm:rounded-[2.4rem] md:rounded-[3rem]"
+          style={{
+            background: "linear-gradient(135deg, #4a4a50 0%, #3a3a40 15%, #2d2d32 30%, #1f1f24 50%, #2d2d32 70%, #3a3a40 85%, #4a4a50 100%)",
+            padding: "8px",
+            boxShadow: `
+              0 50px 100px -20px rgba(0,0,0,0.6),
+              0 30px 60px -30px rgba(0,0,0,0.5),
+              inset 0 2px 4px rgba(255,255,255,0.15),
+              inset 0 -2px 4px rgba(0,0,0,0.3),
+              0 0 0 1px rgba(255,255,255,0.05)
+            `
           }}
         >
-          {/* Inner bezel */}
+          {/* Side buttons - volume */}
           <div 
-            className="relative rounded-[1rem] sm:rounded-[1.5rem] md:rounded-[2.2rem] overflow-hidden"
+            className="absolute -left-[3px] top-[18%] w-[4px] h-5 sm:h-6 md:h-8 rounded-l-sm"
+            style={{ 
+              background: "linear-gradient(90deg, #2a2a30 0%, #3a3a40 50%, #4a4a50 100%)",
+              boxShadow: "-2px 0 4px rgba(0,0,0,0.3)"
+            }} 
+          />
+          <div 
+            className="absolute -left-[3px] top-[28%] w-[4px] h-5 sm:h-6 md:h-8 rounded-l-sm"
+            style={{ 
+              background: "linear-gradient(90deg, #2a2a30 0%, #3a3a40 50%, #4a4a50 100%)",
+              boxShadow: "-2px 0 4px rgba(0,0,0,0.3)"
+            }} 
+          />
+          {/* Power button */}
+          <div 
+            className="absolute -right-[3px] top-[22%] w-[4px] h-8 sm:h-10 md:h-12 rounded-r-sm"
+            style={{ 
+              background: "linear-gradient(90deg, #4a4a50 0%, #3a3a40 50%, #2a2a30 100%)",
+              boxShadow: "2px 0 4px rgba(0,0,0,0.3)"
+            }} 
+          />
+
+          {/* Inner bezel - the actual screen area */}
+          <div 
+            className="relative rounded-[1.4rem] sm:rounded-[2rem] md:rounded-[2.5rem] overflow-hidden"
             style={{
               background: "#000",
-              border: "2px solid #1a1a1e"
+              boxShadow: "inset 0 0 20px rgba(0,0,0,0.8)"
             }}
           >
-            {/* Dynamic Island */}
-            <div className="absolute top-1 sm:top-1.5 md:top-2 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center">
+            {/* Dynamic Island - realistic pill shape */}
+            <div className="absolute top-2 sm:top-2.5 md:top-3 left-1/2 -translate-x-1/2 z-30">
               <div 
-                className="w-12 sm:w-16 md:w-20 h-3 sm:h-4 md:h-5 rounded-full flex items-center justify-center gap-1 sm:gap-1.5"
-                style={{ background: "#000" }}
+                className="w-16 sm:w-20 md:w-24 h-4 sm:h-5 md:h-6 rounded-full flex items-center justify-center gap-2"
+                style={{ 
+                  background: "#000",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.5)"
+                }}
               >
-                {/* Front camera */}
-                <div className="w-1.5 sm:w-2 md:w-2.5 h-1.5 sm:h-2 md:h-2.5 rounded-full bg-neutral-800 ring-1 ring-neutral-700" />
-                {/* Speaker grille */}
-                <div className="w-4 sm:w-5 md:w-6 h-0.5 sm:h-1 rounded-full bg-neutral-800" />
+                {/* Camera */}
+                <div className="w-2 sm:w-2.5 md:w-3 h-2 sm:h-2.5 md:h-3 rounded-full relative overflow-hidden"
+                  style={{
+                    background: "radial-gradient(circle at 30% 30%, #3a3a45, #1a1a20)",
+                    boxShadow: "inset 0 1px 2px rgba(255,255,255,0.1)"
+                  }}
+                >
+                  <div 
+                    className="absolute inset-[2px] rounded-full"
+                    style={{ background: "radial-gradient(circle at 40% 40%, #1e3a5f, #0a1525)" }}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Screen */}
+            {/* Screen with project image */}
             <div className="aspect-[9/19.5] overflow-hidden relative bg-black">
               <img
                 src={images[currentIndex]}
                 alt={alt}
                 className="w-full h-full object-cover object-top transition-opacity duration-300"
               />
-              {/* Screen glass reflection */}
+              
+              {/* Realistic glass reflection overlay */}
               <div 
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%, rgba(255,255,255,0.01) 100%)"
+                  background: `
+                    linear-gradient(
+                      115deg, 
+                      rgba(255,255,255,0.12) 0%, 
+                      rgba(255,255,255,0.05) 20%,
+                      transparent 40%,
+                      transparent 100%
+                    )
+                  `
                 }}
               />
+              
               <NavigationArrows />
             </div>
 
-            {/* Home indicator */}
-            <div className="absolute bottom-1 sm:bottom-1.5 md:bottom-2 left-1/2 -translate-x-1/2 w-8 sm:w-10 md:w-12 h-0.5 sm:h-1 rounded-full bg-white/20 z-20" />
+            {/* Home indicator bar */}
+            <div 
+              className="absolute bottom-1.5 sm:bottom-2 md:bottom-2.5 left-1/2 -translate-x-1/2 w-10 sm:w-12 md:w-16 h-1 sm:h-1.5 rounded-full z-20"
+              style={{
+                background: "rgba(255,255,255,0.25)",
+                boxShadow: "0 0 4px rgba(255,255,255,0.1)"
+              }}
+            />
           </div>
         </div>
       </div>
@@ -122,29 +182,47 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
 
   if (deviceType === "tablet") {
     return (
-      <div className="relative mx-auto w-[160px] sm:w-[240px] md:w-[360px]">
-        {/* iPad-style frame */}
+      <div className="relative mx-auto w-[180px] sm:w-[280px] md:w-[400px]">
+        {/* Outer shadow for depth */}
         <div 
-          className="relative rounded-[0.8rem] sm:rounded-[1.2rem] md:rounded-[1.5rem] overflow-hidden"
+          className="absolute -inset-6 rounded-[2rem] opacity-30 blur-2xl"
           style={{
-            background: "linear-gradient(145deg, #e8e8ed 0%, #d1d1d6 50%, #b8b8bd 100%)",
-            padding: "6px 6px",
-            boxShadow: "0 25px 50px -12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.1)"
+            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.6), transparent 70%)"
+          }}
+        />
+        
+        {/* iPad-style aluminum frame */}
+        <div 
+          className="relative rounded-[1.2rem] sm:rounded-[1.6rem] md:rounded-[2rem]"
+          style={{
+            background: "linear-gradient(135deg, #d8d8dc 0%, #c8c8cc 15%, #b8b8bc 30%, #a8a8ac 50%, #b8b8bc 70%, #c8c8cc 85%, #d8d8dc 100%)",
+            padding: "6px",
+            boxShadow: `
+              0 50px 100px -20px rgba(0,0,0,0.4),
+              0 30px 60px -30px rgba(0,0,0,0.3),
+              inset 0 2px 4px rgba(255,255,255,0.8),
+              inset 0 -2px 4px rgba(0,0,0,0.15),
+              0 0 0 1px rgba(255,255,255,0.3)
+            `
           }}
         >
-          {/* Dark variant frame */}
+          {/* Inner screen bezel */}
           <div 
-            className="relative rounded-[0.6rem] sm:rounded-[1rem] md:rounded-[1.2rem] overflow-hidden"
+            className="relative rounded-[0.9rem] sm:rounded-[1.3rem] md:rounded-[1.6rem] overflow-hidden"
             style={{
               background: "#000",
-              border: "1px solid #2a2a2e"
+              boxShadow: "inset 0 0 15px rgba(0,0,0,0.5)"
             }}
           >
-            {/* Front camera (centered at top) */}
-            <div className="absolute top-1.5 sm:top-2 md:top-3 left-1/2 -translate-x-1/2 z-20">
-              <div className="w-1.5 sm:w-2 md:w-2.5 h-1.5 sm:h-2 md:h-2.5 rounded-full bg-neutral-900 ring-1 ring-neutral-800">
-                <div className="absolute inset-0.5 rounded-full bg-neutral-950 ring-1 ring-blue-500/20" />
-              </div>
+            {/* Front camera */}
+            <div className="absolute top-2 sm:top-2.5 md:top-3 left-1/2 -translate-x-1/2 z-20">
+              <div 
+                className="w-2 sm:w-2.5 md:w-3 h-2 sm:h-2.5 md:h-3 rounded-full"
+                style={{
+                  background: "radial-gradient(circle at 30% 30%, #3a3a45, #1a1a20)",
+                  boxShadow: "inset 0 1px 2px rgba(255,255,255,0.1), 0 1px 3px rgba(0,0,0,0.3)"
+                }}
+              />
             </div>
 
             {/* Screen */}
@@ -154,114 +232,186 @@ export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: De
                 alt={alt}
                 className="w-full h-full object-cover object-top transition-opacity duration-300"
               />
-              {/* Screen glass reflection */}
+              
+              {/* Glass reflection */}
               <div 
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 40%, rgba(255,255,255,0.01) 100%)"
+                  background: `
+                    linear-gradient(
+                      120deg, 
+                      rgba(255,255,255,0.08) 0%, 
+                      rgba(255,255,255,0.03) 25%,
+                      transparent 50%
+                    )
+                  `
                 }}
               />
+              
               <NavigationArrows />
             </div>
 
-            {/* Home indicator bar */}
-            <div className="absolute bottom-1 sm:bottom-1.5 md:bottom-2 left-1/2 -translate-x-1/2 w-10 sm:w-14 md:w-20 h-0.5 sm:h-1 rounded-full bg-white/15 z-20" />
+            {/* Home indicator */}
+            <div 
+              className="absolute bottom-1.5 sm:bottom-2 md:bottom-2.5 left-1/2 -translate-x-1/2 w-12 sm:w-16 md:w-24 h-1 sm:h-1.5 rounded-full z-20"
+              style={{ background: "rgba(255,255,255,0.2)" }}
+            />
           </div>
         </div>
-
-        {/* Apple Pencil magnetic attachment indicator (subtle line on side) */}
-        <div 
-          className="absolute top-[15%] -right-[2px] w-[2px] h-[30%] rounded-full hidden md:block"
-          style={{ background: "linear-gradient(180deg, transparent, rgba(255,255,255,0.1), transparent)" }}
-        />
       </div>
     );
   }
 
-  // Monitor
+  // Monitor - Professional desktop display
   return (
-    <div className="relative mx-auto w-full max-w-[240px] sm:max-w-[360px] md:max-w-[520px]">
-      {/* Monitor screen housing */}
+    <div className="relative mx-auto w-full max-w-[280px] sm:max-w-[420px] md:max-w-[580px]">
+      {/* Large ambient shadow */}
       <div 
-        className="relative rounded-md sm:rounded-lg overflow-hidden"
+        className="absolute -inset-8 opacity-25 blur-3xl"
         style={{
-          background: "linear-gradient(180deg, #1f1f23 0%, #18181b 50%, #0f0f12 100%)",
-          padding: "4px 4px 12px 4px",
-          boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)"
+          background: "radial-gradient(ellipse at center bottom, rgba(0,0,0,0.7), transparent 70%)"
+        }}
+      />
+      
+      {/* Monitor housing - premium slim bezel design */}
+      <div 
+        className="relative rounded-lg sm:rounded-xl overflow-hidden"
+        style={{
+          background: "linear-gradient(180deg, #2a2a30 0%, #1f1f25 30%, #18181d 70%, #101015 100%)",
+          padding: "6px 6px 10px 6px",
+          boxShadow: `
+            0 60px 120px -20px rgba(0,0,0,0.5),
+            0 30px 60px -10px rgba(0,0,0,0.4),
+            inset 0 1px 2px rgba(255,255,255,0.08),
+            inset 0 -1px 2px rgba(0,0,0,0.3),
+            0 0 0 1px rgba(255,255,255,0.03)
+          `
         }}
       >
-        {/* Top bezel with webcam */}
-        <div className="flex items-center justify-center py-1 sm:py-1.5 md:py-2 relative">
-          {/* Webcam housing */}
-          <div className="flex items-center gap-1">
-            {/* Camera lens */}
-            <div className="w-1.5 sm:w-2 md:w-2.5 h-1.5 sm:h-2 md:h-2.5 rounded-full bg-neutral-900 ring-1 ring-neutral-700">
-              <div className="absolute inset-0.5 rounded-full bg-neutral-950">
-                <div className="absolute inset-[2px] rounded-full bg-blue-950/50" />
-              </div>
+        {/* Top bezel with centered webcam */}
+        <div 
+          className="flex items-center justify-center py-1.5 sm:py-2 md:py-2.5 relative"
+          style={{
+            background: "linear-gradient(180deg, #1a1a20 0%, #151518 100%)"
+          }}
+        >
+          {/* Webcam module */}
+          <div className="flex items-center gap-1.5">
+            {/* Camera lens with realistic glass effect */}
+            <div 
+              className="w-2 sm:w-2.5 md:w-3 h-2 sm:h-2.5 md:h-3 rounded-full relative overflow-hidden"
+              style={{
+                background: "radial-gradient(circle at 30% 30%, #3a3a45, #1a1a20)",
+                boxShadow: "inset 0 1px 2px rgba(255,255,255,0.15), 0 1px 2px rgba(0,0,0,0.5)"
+              }}
+            >
+              <div 
+                className="absolute inset-[2px] rounded-full"
+                style={{ background: "radial-gradient(circle at 35% 35%, #1e3a5f, #0a1525)" }}
+              />
             </div>
-            {/* Recording indicator (off) */}
-            <div className="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-neutral-800" />
+            {/* LED indicator */}
+            <div 
+              className="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full"
+              style={{ background: "#1a1a20" }}
+            />
           </div>
         </div>
 
-        {/* Screen */}
+        {/* Screen panel */}
         <div 
           className="aspect-[16/9] overflow-hidden relative rounded-sm"
-          style={{ background: "#000", border: "1px solid #0a0a0a" }}
+          style={{ 
+            background: "#000",
+            boxShadow: "inset 0 0 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.8)"
+          }}
         >
           <img
             src={images[currentIndex]}
             alt={alt}
             className="w-full h-full object-cover object-top transition-opacity duration-300"
           />
-          {/* Screen glass reflection */}
+          
+          {/* Realistic screen glass reflection */}
           <div 
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.01) 100%)"
+              background: `
+                linear-gradient(
+                  125deg, 
+                  rgba(255,255,255,0.06) 0%, 
+                  rgba(255,255,255,0.02) 30%,
+                  transparent 50%,
+                  transparent 100%
+                )
+              `
             }}
           />
+          
           <NavigationArrows />
         </div>
 
-        {/* Bottom bezel with brand area */}
-        <div className="flex items-center justify-center py-1 sm:py-1.5 md:py-2">
-          {/* Brand logo placeholder (subtle) */}
-          <div className="w-6 sm:w-8 md:w-10 h-0.5 sm:h-1 rounded-full bg-neutral-700/50" />
+        {/* Bottom bezel with brand indicator */}
+        <div 
+          className="flex items-center justify-center py-1.5 sm:py-2 md:py-2.5"
+          style={{
+            background: "linear-gradient(180deg, #151518 0%, #1a1a20 100%)"
+          }}
+        >
+          {/* Subtle brand logo placeholder */}
+          <div 
+            className="w-8 sm:w-10 md:w-12 h-1 rounded-full"
+            style={{ 
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)" 
+            }}
+          />
         </div>
       </div>
 
-      {/* Monitor stand neck */}
-      <div className="relative mx-auto flex flex-col items-center">
-        {/* Neck - tapered design */}
+      {/* Monitor stand - modern slim design */}
+      <div className="relative flex flex-col items-center">
+        {/* Neck/arm - tapered aluminum look */}
         <div 
-          className="w-6 sm:w-8 md:w-12 h-8 sm:h-12 md:h-16 relative"
+          className="w-4 sm:w-5 md:w-6 h-10 sm:h-14 md:h-20 relative"
           style={{
-            background: "linear-gradient(90deg, #2a2a2e 0%, #3a3a3e 20%, #4a4a4e 50%, #3a3a3e 80%, #2a2a2e 100%)"
+            background: "linear-gradient(90deg, #28282d 0%, #38383d 30%, #48484d 50%, #38383d 70%, #28282d 100%)",
+            boxShadow: "0 0 10px rgba(0,0,0,0.3), inset 0 0 5px rgba(255,255,255,0.05)"
           }}
         >
-          {/* Highlight on neck */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+          {/* Subtle highlight on neck */}
+          <div 
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.08) 50%, transparent 80%)"
+            }}
+          />
         </div>
         
-        {/* Base - oval shaped */}
+        {/* Base - oval shaped with proper depth */}
         <div 
-          className="w-20 sm:w-28 md:w-40 h-2 sm:h-3 md:h-4 rounded-full relative"
+          className="w-24 sm:w-36 md:w-48 h-2.5 sm:h-3.5 md:h-5 rounded-full relative"
           style={{
-            background: "linear-gradient(180deg, #3a3a3e 0%, #2a2a2e 50%, #1a1a1e 100%)",
-            boxShadow: "0 4px 6px -1px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)"
+            background: "linear-gradient(180deg, #3a3a40 0%, #2a2a30 40%, #1a1a20 100%)",
+            boxShadow: `
+              0 8px 16px -4px rgba(0,0,0,0.4),
+              0 4px 8px -2px rgba(0,0,0,0.3),
+              inset 0 1px 2px rgba(255,255,255,0.1),
+              inset 0 -1px 2px rgba(0,0,0,0.2)
+            `
           }}
         >
-          {/* Base highlight */}
-          <div className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent rounded-full" />
+          {/* Top highlight */}
+          <div 
+            className="absolute inset-x-6 top-0 h-px rounded-full"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)" }}
+          />
         </div>
         
-        {/* Base shadow */}
+        {/* Base shadow on surface */}
         <div 
-          className="w-24 sm:w-32 md:w-44 h-1 sm:h-1.5 md:h-2 rounded-full mt-0.5 opacity-30"
+          className="w-28 sm:w-40 md:w-56 h-1.5 sm:h-2 md:h-3 rounded-full mt-1 opacity-40"
           style={{
-            background: "radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, transparent 70%)"
+            background: "radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, transparent 70%)"
           }}
         />
       </div>
