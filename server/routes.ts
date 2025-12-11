@@ -54,16 +54,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     })
   );
 
-  // Legacy /uploads fallback for existing local images (secured with express.static)
+  // Legacy /uploads fallback for existing local images (secured - only serves image files)
   const uploadsDir = path.join(process.cwd(), "uploads");
   if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
   }
-  app.use("/uploads", (req, res, next) => {
-    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-    next();
+  app.get("/uploads/:filename", (req, res) => {
+    const filename = req.params.filename;
+    const allowedExtensions = /\.(jpeg|jpg|png|gif|webp)$/i;
+    
+    if (!allowedExtensions.test(filename) || filename.includes("..") || filename.includes("/")) {
+      return res.status(404).json({ error: "File not found" });
+    }
+    
+    const filePath = path.join(uploadsDir, filename);
+    const resolvedPath = path.resolve(filePath);
+    
+    if (!resolvedPath.startsWith(path.resolve(uploadsDir))) {
+      return res.status(404).json({ error: "File not found" });
+    }
+    
+    if (fs.existsSync(resolvedPath)) {
+      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+      res.sendFile(resolvedPath);
+    } else {
+      res.status(404).json({ error: "File not found" });
+    }
   });
-  app.use("/uploads", express.static(uploadsDir, { fallthrough: false }));
 
   // Auth Routes
   app.post("/api/auth/register", async (req, res) => {
