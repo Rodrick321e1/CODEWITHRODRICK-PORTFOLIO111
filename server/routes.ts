@@ -5,23 +5,12 @@ import session from "express-session";
 import bcrypt from "bcryptjs";
 import multer from "multer";
 import path from "path";
-import fs from "fs";
 import { sendEmail } from "./gmail";
+import { uploadToSupabase } from "./supabaseStorage";
 import { insertProjectSchema, insertProfileSchema, insertAdminUserSchema } from "@shared/schema";
 
-const uploadsDir = path.join(process.cwd(), "uploads");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
-
 const upload = multer({
-  storage: multer.diskStorage({
-    destination: uploadsDir,
-    filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      cb(null, uniqueSuffix + path.extname(file.originalname));
-    },
-  }),
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
@@ -63,17 +52,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     })
   );
 
-  app.use("/uploads", (req, res, next) => {
-    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-    next();
-  }, (req, res, next) => {
-    const filePath = path.join(uploadsDir, req.path);
-    if (fs.existsSync(filePath)) {
-      res.sendFile(filePath);
-    } else {
-      res.status(404).json({ error: "File not found" });
-    }
-  });
 
   // Auth Routes
   app.post("/api/auth/register", async (req, res) => {
@@ -192,7 +170,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/auth/update-profile-image", requireAuth, upload.single("image"), async (req, res) => {
     try {
-      const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+      let imageUrl: string | null = null;
+      
+      if (req.file) {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const fileName = `profile/${uniqueSuffix}${path.extname(req.file.originalname)}`;
+        imageUrl = await uploadToSupabase(req.file.buffer, fileName, req.file.mimetype);
+      }
       
       const updated = await storage.updateAdminProfileImage(req.session.userId!, imageUrl);
 
@@ -207,13 +191,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Image Upload Route
-  app.post("/api/upload", requireAuth, upload.single("image"), (req, res) => {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+  app.post("/api/upload", requireAuth, upload.single("image"), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
 
-    const imageUrl = `/uploads/${req.file.filename}`;
-    res.json({ imageUrl });
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      const fileName = `projects/${uniqueSuffix}${path.extname(req.file.originalname)}`;
+      const imageUrl = await uploadToSupabase(req.file.buffer, fileName, req.file.mimetype);
+      
+      res.json({ imageUrl });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
   });
 
   // Project Routes
