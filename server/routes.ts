@@ -1,10 +1,12 @@
 import type { Express, Request, Response, NextFunction } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import session from "express-session";
 import bcrypt from "bcryptjs";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import { sendEmail } from "./gmail";
 import { uploadToSupabase } from "./supabaseStorage";
 import { insertProjectSchema, insertProfileSchema, insertAdminUserSchema } from "@shared/schema";
@@ -52,6 +54,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     })
   );
 
+  // Legacy /uploads fallback for existing local images (secured with express.static)
+  const uploadsDir = path.join(process.cwd(), "uploads");
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+  app.use("/uploads", (req, res, next) => {
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    next();
+  });
+  app.use("/uploads", express.static(uploadsDir, { fallthrough: false }));
 
   // Auth Routes
   app.post("/api/auth/register", async (req, res) => {
