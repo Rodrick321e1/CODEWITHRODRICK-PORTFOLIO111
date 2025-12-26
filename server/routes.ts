@@ -3,6 +3,8 @@ import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import session from "express-session";
+import connectPg from "connect-pg-simple";
+import { pool } from "./db";
 import bcrypt from "bcryptjs";
 import multer from "multer";
 import path from "path";
@@ -10,6 +12,8 @@ import fs from "fs";
 import { sendEmail } from "./gmail";
 import { uploadToSupabase } from "./supabaseStorage";
 import { insertProjectSchema, insertProfileSchema, insertAdminUserSchema } from "@shared/schema";
+
+const PostgresSessionStore = connectPg(session);
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -41,13 +45,20 @@ function requireAuth(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Use persistent PostgreSQL session storage for production
   app.use(
     session({
+      store: new PostgresSessionStore({
+        pool,
+        tableName: "session",
+        createTableIfMissing: true,
+      }),
       secret: process.env.SESSION_SECRET || "codewithkayla-secret-key-change-in-production",
       resave: false,
       saveUninitialized: false,
       cookie: {
         secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
       },
