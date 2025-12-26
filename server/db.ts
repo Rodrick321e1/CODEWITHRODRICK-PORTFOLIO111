@@ -6,6 +6,7 @@ if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL environment variable is required");
 }
 
-const client = postgres(process.env.DATABASE_URL, { prepare: false });
+// We use the postgres client which already has its own connection pooling
+export const pool = postgres(process.env.DATABASE_URL, { prepare: false });
 
-export const db = drizzle(client, { schema });
+export const db = drizzle(pool, { schema });
