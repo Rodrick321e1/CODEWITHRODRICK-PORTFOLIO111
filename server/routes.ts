@@ -11,7 +11,11 @@ import path from "path";
 import fs from "fs";
 import { sendEmail } from "./gmail";
 import { uploadToSupabase } from "./supabaseStorage";
-import { insertProjectSchema, insertProfileSchema, insertAdminUserSchema } from "@shared/schema";
+import {
+  insertProjectSchema,
+  insertProfileSchema,
+  insertAdminUserSchema,
+} from "@shared/schema";
 
 const PostgresSessionStore = connectPg(session);
 
@@ -20,7 +24,9 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = allowedTypes.test(
+      path.extname(file.originalname).toLowerCase(),
+    );
     const mimetype = allowedTypes.test(file.mimetype);
 
     if (mimetype && extname) {
@@ -49,11 +55,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(
     session({
       store: new PostgresSessionStore({
-        pool,
+        conString: process.env.DATABASE_URL,
         tableName: "session",
         createTableIfMissing: true,
       }),
-      secret: process.env.SESSION_SECRET || "codewithkayla-secret-key-change-in-production",
+      secret:
+        process.env.SESSION_SECRET ||
+        "codewithkayla-secret-key-change-in-production",
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -62,7 +70,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
       },
-    })
+    }),
   );
 
   // Legacy /uploads fallback for existing local images (secured - only serves image files)
@@ -73,18 +81,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/uploads/:filename", (req, res) => {
     const filename = req.params.filename;
     const allowedExtensions = /\.(jpeg|jpg|png|gif|webp)$/i;
-    
-    if (!allowedExtensions.test(filename) || filename.includes("..") || filename.includes("/")) {
+
+    if (
+      !allowedExtensions.test(filename) ||
+      filename.includes("..") ||
+      filename.includes("/")
+    ) {
       return res.status(404).json({ error: "File not found" });
     }
-    
+
     const filePath = path.join(uploadsDir, filename);
     const resolvedPath = path.resolve(filePath);
-    
+
     if (!resolvedPath.startsWith(path.resolve(uploadsDir))) {
       return res.status(404).json({ error: "File not found" });
     }
-    
+
     if (fs.existsSync(resolvedPath)) {
       res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
       res.sendFile(resolvedPath);
@@ -98,10 +110,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const adminExists = await storage.adminExists();
       if (adminExists) {
-        return res.status(403).json({ error: "Admin account already exists. Registration is closed." });
+        return res
+          .status(403)
+          .json({
+            error: "Admin account already exists. Registration is closed.",
+          });
       }
 
-      const existingUser = await storage.getAdminUserByUsername(req.body.username);
+      const existingUser = await storage.getAdminUserByUsername(
+        req.body.username,
+      );
       if (existingUser) {
         return res.status(400).json({ error: "Username already exists" });
       }
@@ -161,7 +179,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json({ id: user.id, username: user.username, profileImageUrl: user.profileImageUrl });
+    res.json({
+      id: user.id,
+      username: user.username,
+      profileImageUrl: user.profileImageUrl,
+    });
   });
 
   app.get("/api/auth/admin-exists", async (req, res) => {
@@ -178,11 +200,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { currentPassword, newPassword } = req.body;
 
       if (!currentPassword || !newPassword) {
-        return res.status(400).json({ error: "Current and new passwords are required" });
+        return res
+          .status(400)
+          .json({ error: "Current and new passwords are required" });
       }
 
       if (newPassword.length < 6) {
-        return res.status(400).json({ error: "Password must be at least 6 characters" });
+        return res
+          .status(400)
+          .json({ error: "Password must be at least 6 characters" });
       }
 
       const user = await storage.getAdminUser(req.session.userId!);
@@ -196,7 +222,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const hashedPassword = await bcrypt.hash(newPassword, 10);
-      const updated = await storage.updateAdminPassword(req.session.userId!, hashedPassword);
+      const updated = await storage.updateAdminPassword(
+        req.session.userId!,
+        hashedPassword,
+      );
 
       if (!updated) {
         return res.status(500).json({ error: "Failed to update password" });
@@ -208,44 +237,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/auth/update-profile-image", requireAuth, upload.single("image"), async (req, res) => {
-    try {
-      let imageUrl: string | null = null;
-      
-      if (req.file) {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        const fileName = `profile/${uniqueSuffix}${path.extname(req.file.originalname)}`;
-        imageUrl = await uploadToSupabase(req.file.buffer, fileName, req.file.mimetype);
-      }
-      
-      const updated = await storage.updateAdminProfileImage(req.session.userId!, imageUrl);
+  app.post(
+    "/api/auth/update-profile-image",
+    requireAuth,
+    upload.single("image"),
+    async (req, res) => {
+      try {
+        let imageUrl: string | null = null;
 
-      if (!updated) {
-        return res.status(500).json({ error: "Failed to update profile image" });
-      }
+        if (req.file) {
+          const uniqueSuffix =
+            Date.now() + "-" + Math.round(Math.random() * 1e9);
+          const fileName = `profile/${uniqueSuffix}${path.extname(req.file.originalname)}`;
+          imageUrl = await uploadToSupabase(
+            req.file.buffer,
+            fileName,
+            req.file.mimetype,
+          );
+        }
 
-      res.json({ success: true, profileImageUrl: imageUrl });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+        const updated = await storage.updateAdminProfileImage(
+          req.session.userId!,
+          imageUrl,
+        );
+
+        if (!updated) {
+          return res
+            .status(500)
+            .json({ error: "Failed to update profile image" });
+        }
+
+        res.json({ success: true, profileImageUrl: imageUrl });
+      } catch (error: any) {
+        res.status(500).json({ error: error.message });
+      }
+    },
+  );
 
   // Image Upload Route
-  app.post("/api/upload", requireAuth, upload.single("image"), async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({ error: "No file uploaded" });
-      }
+  app.post(
+    "/api/upload",
+    requireAuth,
+    upload.single("image"),
+    async (req, res) => {
+      try {
+        if (!req.file) {
+          return res.status(400).json({ error: "No file uploaded" });
+        }
 
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-      const fileName = `projects/${uniqueSuffix}${path.extname(req.file.originalname)}`;
-      const imageUrl = await uploadToSupabase(req.file.buffer, fileName, req.file.mimetype);
-      
-      res.json({ imageUrl });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        const fileName = `projects/${uniqueSuffix}${path.extname(req.file.originalname)}`;
+        const imageUrl = await uploadToSupabase(
+          req.file.buffer,
+          fileName,
+          req.file.mimetype,
+        );
+
+        res.json({ imageUrl });
+      } catch (error: any) {
+        res.status(500).json({ error: error.message });
+      }
+    },
+  );
 
   // Project Routes
   app.get("/api/projects", async (req, res) => {
@@ -354,13 +407,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <p><strong>Message:</strong></p>
           <p>${message.replace(/\n/g, "<br>")}</p>
         `,
-        email
+        email,
       );
 
       res.json({ success: true });
     } catch (error: any) {
       console.error("Email error:", error);
-      res.status(500).json({ error: "Failed to send email. Please try again later." });
+      res
+        .status(500)
+        .json({ error: "Failed to send email. Please try again later." });
     }
   });
 
