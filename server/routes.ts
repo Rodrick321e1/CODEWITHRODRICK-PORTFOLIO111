@@ -49,7 +49,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use(
     session({
       store: new PostgresSessionStore({
-        pool,
+        conObject: {
+          connectionString: process.env.DATABASE_URL,
+          ssl: {
+            rejectUnauthorized: false
+          }
+        },
         tableName: "session",
         createTableIfMissing: true,
       }),

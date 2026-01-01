@@ -7,6 +7,6 @@ if (!process.env.DATABASE_URL) {
 }
 
 // We use the postgres client which already has its own connection pooling
-export const pool = postgres(process.env.DATABASE_URL, { prepare: false });
+export const queryClient = postgres(process.env.DATABASE_URL, { prepare: false });
 
-export const db = drizzle(pool, { schema });
+export const db = drizzle(queryClient, { schema });
