@@ -9,7 +9,8 @@ interface DeviceFrameProps {
 }
 
 export default function DeviceFrame({ imageUrl, imageUrls, deviceType, alt }: DeviceFrameProps) {
-  const images = imageUrls && imageUrls.length > 0 ? imageUrls : [imageUrl];
+  // Main image first, then additional images
+  const images = [imageUrl, ...(imageUrls || [])];
   const [currentIndex, setCurrentIndex] = useState(0);
   const hasMultipleImages = images.length > 1;
 
