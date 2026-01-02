@@ -11,6 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
+      "@assets": path.resolve(__dirname, "client", "src", "assets"),
       "@db": path.resolve(__dirname, "db"),
     },
   },
@@ -19,4 +20,4 @@ export default defineConfig({
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
   },
-});;
+});
